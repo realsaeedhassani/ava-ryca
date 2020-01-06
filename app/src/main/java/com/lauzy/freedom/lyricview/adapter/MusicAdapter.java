@@ -22,15 +22,15 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder>
         implements Filterable {
     private Context context;
-    private List<Music> contactList;
-    private List<Music> contactListFiltered;
+    private List<Music> musicList;
+    private List<Music> musicListFilter;
     private MusicAdapterListener listener;
 
     public MusicAdapter(Context context, List<Music> contactList, MusicAdapterListener listener) {
         this.context = context;
         this.listener = listener;
-        this.contactList = contactList;
-        this.contactListFiltered = contactList;
+        this.musicList = contactList;
+        this.musicListFilter = contactList;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final Music contact = contactListFiltered.get(position);
+        final Music contact = musicListFilter.get(position);
         holder.name.setText(contact.getName());
         holder.phone.setText(contact.getSinger());
 
@@ -55,7 +55,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return contactListFiltered.size();
+        return musicListFilter.size();
     }
 
     @Override
@@ -65,29 +65,25 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    contactListFiltered = contactList;
+                    musicListFilter = musicList;
                 } else {
                     List<Music> filteredList = new ArrayList<>();
-                    for (Music row : contactList) {
-
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or date number match
+                    for (Music row : musicList) {
                         if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getUrl().contains(charSequence)) {
                             filteredList.add(row);
                         }
                     }
-
-                    contactListFiltered = filteredList;
+                    musicListFilter = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = contactListFiltered;
+                filterResults.values = musicListFilter;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactListFiltered = (ArrayList<Music>) filterResults.values;
+                musicListFilter = (ArrayList<Music>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -97,11 +93,11 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         void onContactSelected(Music contact);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, phone;
-        public ImageView thumbnail;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView name, phone;
+        ImageView thumbnail;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             phone = view.findViewById(R.id.phone);
@@ -109,7 +105,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
             view.setOnClickListener(view1 -> {
                 // send selected contact in callback
-                listener.onContactSelected(contactListFiltered.get(getAdapterPosition()));
+                listener.onContactSelected(musicListFilter.get(getAdapterPosition()));
             });
         }
     }

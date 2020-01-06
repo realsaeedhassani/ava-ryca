@@ -15,22 +15,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lauzy.freedom.lyricview.R;
 import com.lauzy.freedom.lyricview.Utils.AudioStreamWorkerTask;
 import com.lauzy.freedom.lyricview.Utils.OnCacheCallback;
-import com.lauzy.freedom.lyricview.R;
-import com.lauzy.freedom.lyricview.Utils.Util;
 import com.lauzy.freedom.lyricview.ViewLyric.Lrc;
 import com.lauzy.freedom.lyricview.ViewLyric.LrcHelper;
 import com.lauzy.freedom.lyricview.ViewLyric.LrcView;
 import com.lauzy.freedom.lyricview.api.Api;
 import com.lauzy.freedom.lyricview.api.ServiceGenerator;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -52,22 +47,25 @@ public class LyricViewFragment extends Fragment {
     private Handler mHandler = new Handler();
     private SeekBar mSeekBar;
     private TextView mTvStart;
-    private List<Lrc> lrcs;
+    private List<Lrc> mLRC;
+    private String mName;
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            int currentPosition = mMediaPlayer.getCurrentPosition();
-            mLrcView.updateTime(currentPosition);
-            mSeekBar.setProgress(currentPosition);
-            mTvStart.setText(LrcHelper.formatTime(currentPosition));
-            mHandler.postDelayed(this, 100);
+            try {
+
+                int currentPosition = mMediaPlayer.getCurrentPosition();
+                mLrcView.updateTime(currentPosition);
+                mSeekBar.setProgress(currentPosition);
+                mTvStart.setText(LrcHelper.formatTime(currentPosition));
+                mHandler.postDelayed(this, 100);
+            } catch (IllegalStateException ignored) {
+            }
         }
     };
 
-    public LyricViewFragment() {
-    }
-
-    public LyricViewFragment(Context context) {
+    public LyricViewFragment(Context context, String name) {
+        mName = name;
         mContext = context;
         serviceGenerator = ServiceGenerator.getInstance(mContext);
     }
@@ -77,8 +75,6 @@ public class LyricViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lyric, container, false);
         getData();
-//        init();
-//        play();
         return view;
     }
 
@@ -89,36 +85,17 @@ public class LyricViewFragment extends Fragment {
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-//        Search search = new Search();
-//        search.setCategory(cat);
-//        search.setCity(city);
-//        search.setTitle(title);
-//        search.setUni(uni);
-        Call<ResponseBody> call = service.getLrc("d.lrc");
+        Call<ResponseBody> call = service.getLrc(mName + ".lrc");
+        Log.e(">> URL: ", call.request().url() + " ");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    File file = null;
-                    try (InputStream input = response.body().byteStream()) {
-
-                        file = new File(mContext.getCacheDir(), "__lrc__" +
-                                Util.getRandomNumber(1, 10000));
-
-                        try (OutputStream output = new FileOutputStream(file)) {
-                            byte[] buffer = new byte[4 * 1024]; // or other buffer size
-                            int read;
-
-                            while ((read = input.read(buffer)) != -1) {
-                                output.write(buffer, 0, read);
-                            }
-                            output.flush();
-                        }
-                    } finally {
-                        lrcs = LrcHelper.parseLrcFromFile(file);
-                        init();
-                    }
+                    mLRC = LrcHelper.parseInputStream(response.body().byteStream());
+                    init();
+                    play();
                 } catch (Exception ignored) {
+                    Log.e("ERROR_", " " + ignored.getMessage());
                 }
             }
 
@@ -149,7 +126,6 @@ public class LyricViewFragment extends Fragment {
                     @Override
                     public void onSuccess(FileInputStream fileInputStream) {
                         if (fileInputStream != null) {
-                            // reset media player here if necessary
                             mMediaPlayer = new MediaPlayer();
                             try {
                                 mMediaPlayer.setDataSource(fileInputStream.getFD());
@@ -157,6 +133,7 @@ public class LyricViewFragment extends Fragment {
                                 mMediaPlayer.setVolume(1f, 1f);
                                 mMediaPlayer.setLooping(false);
                                 mMediaPlayer.start();
+                                mSeekBar.setMax(mMediaPlayer.getDuration());
                                 mHandler.post(mRunnable);
                                 fileInputStream.close();
                             } catch (IOException | IllegalStateException e) {
@@ -172,64 +149,19 @@ public class LyricViewFragment extends Fragment {
                         Log.e(getClass().getSimpleName() + ".MediaPlayer", "Can't play audio file");
                     }
                 }).execute("http://3d4.ir/files/d.mp3");
-
-//                mMediaPlayer = MediaPlayer.create(mContext, Uri.parse(proxyUrl));
-//
-//                mMediaPlayer.prepare();
-//                mMediaPlayer.setVolume(0.5f, 0.5f);
-//                mMediaPlayer.setLooping(false);
-//                mSeekBar.setMax(mMediaPlayer.getDuration());
-//                mMediaPlayer.start();
-//                mHandler.post(mRunnable);
             }
             wasPlaying = false;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ERROR_", " " + e.getMessage());
         }
-//        try {
-////            HttpProxyCacheServer proxy = AppController.getProxy(mContext);
-////            HttpProxyCacheServer proxyCacheServer =new HttpProxyCacheServer(mContext);
-////            String proxyUrl = proxyCacheServer.getProxyUrl("http://3d4.ir/files/d.mp3");
-//            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-//                clearMediaPlayer();
-//                mSeekBar.setProgress(0);
-//                wasPlaying = true;
-//                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-//                        android.R.drawable.ic_media_play));
-//            }
-//            if (!wasPlaying) {
-//                if (mMediaPlayer == null) {
-//                    mMediaPlayer = new MediaPlayer();
-//                }
-//                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-//                        android.R.drawable.ic_media_pause));
-//
-////                AssetFileDescriptor descriptor = mContext.getAssets().openFd("rolling.mp3");
-////                mMediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(),
-////                        descriptor.getLength());
-////                descriptor.close();
-//
-//                mMediaPlayer = MediaPlayer.create(mContext, Uri.parse(proxyUrl));
-//
-//                mMediaPlayer.prepare();
-//                mMediaPlayer.setVolume(0.5f, 0.5f);
-//                mMediaPlayer.setLooping(false);
-//                mSeekBar.setMax(mMediaPlayer.getDuration());
-//                mMediaPlayer.start();
-//                mHandler.post(mRunnable);
-//            }
-//            wasPlaying = false;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void init() {
         try {
-//        lrcs = LrcHelper.parseLrcFromAssets(mContext, "rolling.lrc");
-//            List<Lrc> lrcs = LrcHelper.parseLrcFromAssets(mContext, "rolling.lrc");
             fab = view.findViewById(R.id.fab);
             fabRepeat = view.findViewById(R.id.fab_repeat);
+            mSeekBar = view.findViewById(R.id.seek_play);
+            mTvStart = view.findViewById(R.id.tv_start);
             fab.setOnClickListener(v -> {
                 if (wasPlaying) {
                     mMediaPlayer.pause();
@@ -262,11 +194,12 @@ public class LyricViewFragment extends Fragment {
                 }
             });
             mLrcView = view.findViewById(R.id.lrc_view);
-            mLrcView.setLrcData(lrcs);
+            mLrcView.setLrcData(mLRC);
             mLrcView.setOnPlayIndicatorLineListener((time, content) -> mMediaPlayer.seekTo((int) time));
             mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Log.e(">> PROGRESS: " , String.valueOf(progress));
                     if (fromUser) {
                         mHandler.removeCallbacks(mRunnable);
                     }
@@ -280,6 +213,7 @@ public class LyricViewFragment extends Fragment {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     mHandler.post(mRunnable);
+                    Log.e(">> TrackingTouch: " , String.valueOf(seekBar.getProgress()));
                     mMediaPlayer.seekTo(seekBar.getProgress());
                 }
             });
@@ -293,5 +227,17 @@ public class LyricViewFragment extends Fragment {
         mMediaPlayer.stop();
         mMediaPlayer.release();
         mMediaPlayer = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

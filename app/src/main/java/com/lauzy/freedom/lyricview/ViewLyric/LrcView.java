@@ -34,7 +34,7 @@ import java.util.List;
 
 public class LrcView extends View {
 
-    private static final String DEFAULT_CONTENT = "Empty";
+    private static String DEFAULT_CONTENT;
     private List<Lrc> mLrcData;
     private TextPaint mTextPaint;
     private String mDefaultContent;
@@ -107,6 +107,7 @@ public class LrcView extends View {
 
     private void init(Context context, AttributeSet attrs) {
 
+        DEFAULT_CONTENT = context.getString(R.string.get_info);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LrcView);
         mLrcTextSize = typedArray.getDimension(R.styleable.LrcView_lrcTextSize, sp2px(context, 15));
         mLrcLineSpaceHeight = typedArray.getDimension(R.styleable.LrcView_lrcLineSpaceSize, dp2px(context, 20));
@@ -147,7 +148,7 @@ public class LrcView extends View {
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         mTextPaint.setTextSize(mLrcTextSize);
 
-        mDefaultContent = DEFAULT_CONTENT;
+        mDefaultContent = context.getString(R.string.get_info);
 
         mIndicatorPaint = new Paint();
         mIndicatorPaint.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/by.ttf"));
@@ -221,18 +222,18 @@ public class LrcView extends View {
             drawLrc(canvas, x, y, i);
         }
 
-//        if (isShowTimeIndicator) {
-//            mPlayDrawable.draw(canvas);
-//            long time = mLrcData.get(indicatePosition).getTime();
-//            float timeWidth = mIndicatorPaint.measureText(LrcHelper.formatTime(time));
-//            mIndicatorPaint.setColor(mIndicatorLineColor);
-//            canvas.drawLine(mPlayRect.right + mIconLineGap, getHeight() / 2f,
-//                    getWidth() - timeWidth * 1.3f, getHeight() / 2f, mIndicatorPaint);
-//            int baseX = (int) (getWidth() - timeWidth * 1.1f);
-//            float baseline = getHeight() / 2f - (mIndicatorPaint.descent() - mIndicatorPaint.ascent()) / 2 - mIndicatorPaint.ascent();
-//            mIndicatorPaint.setColor(mIndicatorTextColor);
-//            canvas.drawText(LrcHelper.formatTime(time), baseX, baseline, mIndicatorPaint);
-//        }
+        if (isShowTimeIndicator) {
+            mPlayDrawable.draw(canvas);
+            long time = mLrcData.get(indicatePosition).getTime();
+            float timeWidth = mIndicatorPaint.measureText(LrcHelper.formatTime(time));
+            mIndicatorPaint.setColor(mIndicatorLineColor);
+            canvas.drawLine(mPlayRect.right + mIconLineGap, getHeight() / 2f,
+                    getWidth() - timeWidth * 1.3f, getHeight() / 2f, mIndicatorPaint);
+            int baseX = (int) (getWidth() - timeWidth * 1.1f);
+            float baseline = getHeight() / 2f - (mIndicatorPaint.descent() - mIndicatorPaint.ascent()) / 2 - mIndicatorPaint.ascent();
+            mIndicatorPaint.setColor(mIndicatorTextColor);
+            canvas.drawText(LrcHelper.formatTime(time), baseX, baseline, mIndicatorPaint);
+        }
     }
 
     private void drawLrc(Canvas canvas, float x, float y, int i) {

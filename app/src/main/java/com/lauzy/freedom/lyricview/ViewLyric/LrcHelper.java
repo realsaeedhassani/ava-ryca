@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +41,7 @@ public class LrcHelper {
         return null;
     }
 
-    private static List<Lrc> parseInputStream(InputStream inputStream) {
+    public static List<Lrc> parseInputStream(InputStream inputStream) {
         List<Lrc> lrcs = new ArrayList<>();
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -50,18 +49,18 @@ public class LrcHelper {
             isr = new InputStreamReader(inputStream, CHARSET);
             br = new BufferedReader(isr);
             String line;
-            while ((line = br.readLine()) != null) {
-                List<Lrc> lrcList = parseLrc(line);
-                if (lrcList != null && lrcList.size() != 0) {
-                    lrcs.addAll(lrcList);
+            try {
+                while ((line = br.readLine()) != null) {
+                    List<Lrc> lrcList = parseLrc(line);
+                    if (lrcList != null && lrcList.size() != 0) {
+                        lrcs.addAll(lrcList);
+                    }
                 }
+            } catch (Exception ignored) {
             }
             sortLrcs(lrcs);
             return lrcs;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (UnsupportedEncodingException ignored) {
         } finally {
             try {
                 if (isr != null) {
@@ -78,12 +77,7 @@ public class LrcHelper {
     }
 
     private static void sortLrcs(List<Lrc> lrcs) {
-        Collections.sort(lrcs, new Comparator<Lrc>() {
-            @Override
-            public int compare(Lrc o1, Lrc o2) {
-                return (int) (o1.getTime() - o2.getTime());
-            }
-        });
+        Collections.sort(lrcs, (o1, o2) -> (int) (o1.getTime() - o2.getTime()));
     }
 
     private static List<Lrc> parseLrc(String lrcLine) {

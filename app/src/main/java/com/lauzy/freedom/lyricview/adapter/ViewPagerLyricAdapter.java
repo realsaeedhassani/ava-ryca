@@ -1,21 +1,21 @@
 package com.lauzy.freedom.lyricview.adapter;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.lauzy.freedom.lyricview.fragment.AlbumsFragment;
 import com.lauzy.freedom.lyricview.fragment.CommentsFragment;
 import com.lauzy.freedom.lyricview.fragment.LyricViewFragment;
-import com.lauzy.freedom.lyricview.fragment.SingerFragment;
 
 public class ViewPagerLyricAdapter extends FragmentPagerAdapter {
-private Context mContext;
-    public ViewPagerLyricAdapter(FragmentManager fm, Context context) {
+    private Context mContext;
+    private String mName;
+
+    public ViewPagerLyricAdapter(String name, FragmentManager fm, Context context) {
         super(fm);
+        mName = name;
         mContext = context;
     }
 
@@ -23,7 +23,7 @@ private Context mContext;
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new LyricViewFragment(mContext);
+                return new LyricViewFragment(mContext, mName);
             case 1:
                 return new CommentsFragment(mContext);
         }

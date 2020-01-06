@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lauzy.freedom.lyricview.Utils.MyDividerItemDecoration;
 import com.lauzy.freedom.lyricview.R;
+import com.lauzy.freedom.lyricview.Utils.MyDividerItemDecoration;
 import com.lauzy.freedom.lyricview.acitivity.LyricActivity;
 import com.lauzy.freedom.lyricview.adapter.MusicAdapter;
 import com.lauzy.freedom.lyricview.model.Music;
@@ -48,11 +48,14 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
         view = inflater.inflate(R.layout.fragment_album, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
         mMusicList = new ArrayList<>();
-        for (int i = 1; i < 10; ++i) {
+        for (int i = 1; i < 3; ++i) {
             Music c = new Music();
             c.setId(i);
-            c.setName("نام:‌ " + i);
-            c.setSinger("Saeed__" + (135484 * i));
+            if (i == 1)
+                c.setName("d");
+            else
+                c.setName("d" + i);
+            c.setSinger("آهنگ شماره " + i);
             c.setUrl("https://static.cdn.asset.aparat.com/profile-photo/506723-s.jpg");
             mMusicList.add(c);
         }
@@ -71,20 +74,12 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
         return view;
     }
 
-    private void whiteNotificationBar(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int flags = view.getSystemUiVisibility();
-            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            view.setSystemUiVisibility(flags);
-            mActivity.getWindow().setStatusBarColor(Color.WHITE);
-        }
-    }
-
     @Override
     public void onContactSelected(Music contact) {
-        Intent intent = new Intent();
-        intent.putExtra("MID", contact.getId());
-        startActivity(new Intent(mActivity, LyricActivity.class));
+        Intent intent = new Intent(mActivity, LyricActivity.class);
+        intent.putExtra("ID", contact.getId());
+        intent.putExtra("NAME", contact.getName());
+        startActivity(intent);
         mActivity.finish();
     }
 }

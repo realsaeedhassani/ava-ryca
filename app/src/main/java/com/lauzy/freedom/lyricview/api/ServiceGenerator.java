@@ -27,7 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
-    private static final long cacheSize = 50 * 1024 * 1024; // 5 MB
+    private static final long cacheSize = 50 * 1024 * 1024; // 50 MB
     private static String API_BASE_URL = "http://3d4.ir/";
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -156,12 +156,12 @@ public class ServiceGenerator {
 
     private static Cache cache() {
         return new Cache(new File(AppController.getInstance().getCacheDir(),
-                "someIdentifier"), cacheSize);
+                "files"), cacheSize);
     }
 
-    public static Api getApi() {
-        return retrofit.create(Api.class);
-    }
+//    public static Api getApi() {
+//        return retrofit.create(Api.class);
+//    }
 }
 
 

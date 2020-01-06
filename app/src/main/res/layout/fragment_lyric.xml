@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    android:orientation="vertical"
     android:layoutDirection="rtl"
+    android:orientation="vertical"
     android:textDirection="rtl"
     tools:ignore="rtlHardcoded">
 
@@ -23,13 +23,11 @@
         android:background="@color/transparent"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
+        app:currentIndicateLrcColor="@color/colorAccent"
+        app:indicatorTextColor="@color/colorAccent"
         app:isLrcCurrentTextBold="true"
-        app:isLrcIndicatorTextBold="true" />
-<!--    app:currentIndicateLrcColor="@color/colorAccent"-->
-<!--    app:indicatorTextColor="@android:color/holo_orange_dark"-->
-<!--    app:isLrcCurrentTextBold="true"-->
-<!--    app:isLrcIndicatorTextBold="true"-->
-<!--    app:playIcon="@drawable/play_music" />-->
+        app:isLrcIndicatorTextBold="true"/>
+
     <LinearLayout
         android:id="@+id/ll_sb"
         android:layout_width="match_parent"
@@ -41,9 +39,9 @@
         <SeekBar
             android:id="@+id/seek_play"
             android:layout_width="0dp"
-            android:layout_marginRight="@dimen/_5sdp"
-            android:layout_marginLeft="@dimen/_5sdp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -52,8 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginBottom="@dimen/_5sdp"
+        android:gravity="center"
         android:layoutDirection="rtl"
         android:orientation="horizontal">
 
@@ -62,28 +60,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginLeft="@dimen/_5sdp"
-            />
+            android:layout_marginRight="@dimen/_5sdp" />
+
         <TextView
             android:id="@+id/tv_start"
             android:layout_width="wrap_content"
-            android:minWidth="@dimen/_40sdp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:minWidth="@dimen/_40sdp"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_14sdp"
-            android:layout_marginRight="@dimen/_5sdp"
-            android:layout_marginLeft="@dimen/_5sdp"
             android:textStyle="bold" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_repeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:backgroundTint="@color/fab"
-            android:src="@drawable/ic_repeat"
-            android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:src="@drawable/ic_repeat"
+            app:backgroundTint="@color/fab" />
     </LinearLayout>
 </LinearLayout>
