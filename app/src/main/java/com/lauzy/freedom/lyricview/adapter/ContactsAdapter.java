@@ -74,8 +74,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Singer contact = contactListFiltered.get(position);
         holder.name.setText(contact.getName());
-        holder.phone.setText(context.getString(R.string.num_track) + " "
-                + contact.getCount());
+        holder.phone.setText(String.valueOf(contact.getCount()));
         Glide.with(context)
                 .load(CONSTANT.BASE_URL
                         + "/files/"

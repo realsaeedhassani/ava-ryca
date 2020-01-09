@@ -18,7 +18,6 @@ import retrofit2.http.Streaming;
 
 public interface Api {
     @GET("files/{singer}/{album}/{id}")
-    @Streaming
     Call<ResponseBody> getLrc(@Path("singer") String singer,
                               @Path("album") String album,
                               @Path("id") String id);

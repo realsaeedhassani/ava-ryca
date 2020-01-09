@@ -139,7 +139,6 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
             public void onResponse(Call<DatumSinger> call,
                                    Response<DatumSinger> response) {
                 DatumSinger results = response.body();
-                Log.e(">> Page-Last: ", response.code() + " ");
                 if (results != null) {
                     mAdapter.addAll(results.getData());
                 } else loading = false;
@@ -147,7 +146,6 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
 
             @Override
             public void onFailure(Call<DatumSinger> call, Throwable t) {
-                Log.e(">> ERROR-SINGER: ", "LAST: " + t.getMessage());
             }
         });
     }
@@ -160,13 +158,11 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
             e.printStackTrace();
         }
         Call<DatumSinger> call = service.getSinger(currentPage);
-        Log.e(">> SINGER: ", call.request().url() + " ");
         call.enqueue(new Callback<DatumSinger>() {
             @Override
             public void onResponse(Call<DatumSinger> call, Response<DatumSinger> response) {
 
                 DatumSinger results = response.body();
-                Log.e(">> Page-First: ", response.code() + " ");
                 if (results != null) {
                     mAdapter.addAll(results.getData());
                 } else loading = false;
@@ -174,7 +170,6 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
 
             @Override
             public void onFailure(Call<DatumSinger> call, Throwable t) {
-                Log.e(">> ERROR-SINGER: ", "FIRST: " + t.getMessage());
             }
         });
     }

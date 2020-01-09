@@ -1,6 +1,7 @@
 package com.lauzy.freedom.lyricview.ViewLyric;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,6 +62,7 @@ public class LrcHelper {
             sortLrcs(lrcs);
             return lrcs;
         } catch (UnsupportedEncodingException ignored) {
+            Log.e(">> LRC2: ", ignored.getMessage() + " ");
         } finally {
             try {
                 if (isr != null) {
@@ -71,6 +73,7 @@ public class LrcHelper {
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
+                Log.e(">> LRC3: ", e1.getMessage() + " ");
             }
         }
         return lrcs;

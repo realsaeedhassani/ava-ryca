@@ -6,10 +6,6 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.jakewharton.disklrucache.DiskLruCache;
-
-import java.io.IOException;
-
 import es.dmoral.toasty.Toasty;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -30,14 +26,14 @@ public class AppController extends Application {
         return instance.isNetworkConnected();
     }
 
-    public static DiskLruCache getDiskCache(Context context) {
-        try {
-            return DiskLruCache.open(context.getCacheDir(), 1, 1, 50 * 1024 * 1024);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public static DiskLruCache getDiskCache(Context context) {
+//        try {
+//            return DiskLruCache.open(context.getCacheDir(), 1, 1, 50 * 1024 * 1024);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     @Override
     public void onCreate() {

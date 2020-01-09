@@ -105,7 +105,6 @@ public class CommentsFragment extends Fragment implements CommentAdapter.Comment
                         mAdapter.addAll(results.getData());
                     } else loading = false;
                 } catch (Exception ignored) {
-                    Log.e(">> Page-Last: ", ignored.getMessage() + " ");
                 }
             }
 
@@ -132,13 +131,11 @@ public class CommentsFragment extends Fragment implements CommentAdapter.Comment
                         mAdapter.addAll(results.getData());
                     } else loading = false;
                 } catch (Exception ignored) {
-                    Log.e(">> Page-Firs-Error: ", ignored.getMessage() + " ");
                 }
             }
 
             @Override
             public void onFailure(Call<DatumComment> call, Throwable t) {
-                Log.e(">> Load Error: ", t.getMessage() + " ");
             }
         });
     }

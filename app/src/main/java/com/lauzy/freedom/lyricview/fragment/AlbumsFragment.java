@@ -106,19 +106,16 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
             e.printStackTrace();
         }
         Call<DatumAlbum> call = service.getAlbum(mId, currentPage);
-        Log.e(">> ALBUM: ", call.request().url() + " ");
         call.enqueue(new Callback<DatumAlbum>() {
             @Override
             public void onResponse(Call<DatumAlbum> call,
                                    Response<DatumAlbum> response) {
                 try {
                     DatumAlbum results = response.body();
-                    Log.e(">> Page-Last: ", response.code() + " ");
                     if (results != null) {
                         mAdapter.addAll(results.getData());
                     } else loading = false;
                 } catch (Exception ignored) {
-                    Log.e(">> Page-Last: ", ignored.getMessage() + " ");
                 }
             }
 
@@ -136,24 +133,20 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
             e.printStackTrace();
         }
         Call<DatumAlbum> call = service.getAlbum(mId, currentPage);
-        Log.e(">> ALBUM: ", call.request().url() + " ");
         call.enqueue(new Callback<DatumAlbum>() {
             @Override
             public void onResponse(Call<DatumAlbum> call, Response<DatumAlbum> response) {
                 try {
                     DatumAlbum results = response.body();
-                    Log.e(">> Page-First: ", response.code() + " ");
                     if (results != null) {
                         mAdapter.addAll(results.getData());
                     } else loading = false;
                 } catch (Exception ignored) {
-                    Log.e(">> Page-Firs-Error: ", ignored.getMessage() + " ");
                 }
             }
 
             @Override
             public void onFailure(Call<DatumAlbum> call, Throwable t) {
-                Log.e(">> Load Error: ", t.getMessage() + " ");
             }
         });
     }
@@ -164,6 +157,7 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
         intent.putExtra("ID", contact.getId());
         intent.putExtra("SID", mId);
         intent.putExtra("NAME", contact.getName());
+        intent.putExtra("SCORE", contact.getRate());
         intent.putExtra("SINGER", mSinger);
         startActivity(intent);
         mActivity.overridePendingTransition(R.anim.fade_out, R.anim.fade_in);

@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AdminMessage> call, Throwable t) {
-                Log.e(">> Load Error: ", t.getMessage() + " ");
             }
         });
 
@@ -145,10 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
             SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
             editor.putString("name", name.getText().toString().trim().replaceAll("\\s+", " "));
-            editor.putString("mail", email.getText().toString().trim().replaceAll("\\s+", " "));
+            editor.putString("email", email.getText().toString().trim().replaceAll("\\s+", " "));
             editor.apply();
             Toasty.success(MainActivity.this, getString(R.string.done), Toasty.LENGTH_LONG).show();
-//            account.setVisibility(View.GONE);
             dialog.dismiss();
         });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

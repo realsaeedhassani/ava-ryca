@@ -8,6 +8,7 @@
     <color name="purple_active">#9c27b0</color>
     <color name="blue_active">#03a9f4</color>
     <color name="green_active">#4caf50</color>
+    <color name="count">#C44CAF50</color>
     <color name="blue_grey_active">#607d8b</color>
     <color name="yellow_active">#ffeb3b</color>
     <color name="orange_active">#ff9800</color>
@@ -72,7 +73,7 @@
     <color name="fab">#5785A6</color>
     <color name="comment_color">#3F51B5</color>
 
-    <color name="rate_0">#FD2D1C</color>
+    <color name="rate_0">#FC4335</color>
     <color name="rate_3">#03A9F4</color>
     <color name="rate_5">#4caf50</color>
 

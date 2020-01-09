@@ -9,9 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,12 +39,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LyricActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "CLIENT";
-    ViewPager viewPager;
-    ImageView account;
-    String mName;
-    String mSinger;
-    int mId, mSid;
-    String mScore = "3";
+    private ViewPager viewPager;
+    private ImageView account;
+    private String mName;
+    private String mSinger;
+    private int mId, mSid;
+    private String mScore;
     private Dialog dialog;
 
     @Override
@@ -54,6 +52,7 @@ public class LyricActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +62,7 @@ public class LyricActivity extends AppCompatActivity {
             if (extras == null) {
                 mName = null;
                 mSinger = null;
+                mScore = null;
                 mId = 0;
                 mSid = 0;
             } else {
@@ -70,65 +70,24 @@ public class LyricActivity extends AppCompatActivity {
                 mSid = extras.getInt("SID");
                 mName = extras.getString("NAME");
                 mSinger = extras.getString("SINGER");
+                mScore = extras.getString("SCORE");
             }
         } else {
             mName = (String) savedInstanceState.getSerializable("NAME");
             mSinger = (String) savedInstanceState.getSerializable("SINGER");
+            mScore = (String) savedInstanceState.getSerializable("SCORE");
             mId = (int) savedInstanceState.getSerializable("ID");
             mSid = (int) savedInstanceState.getSerializable("SID");
         }
-
-
         TextView singer = findViewById(R.id.tv_singer);
         TextView title = findViewById(R.id.tv_title);
-
         singer.setText(mSinger);
         title.setText(mName);
         TextView score = findViewById(R.id.score);
-        score.setText(String.format(score.getText().toString(), mScore));
-
-        getScore();
-
-        dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_please_wait);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        dialog.show();
-
-
-        viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new ViewPagerLyricAdapter(mName, mId, mSid,
-                getSupportFragmentManager(), getBaseContext()));
-    }
-
-    private void getScore() {
-        Api service = null;
-        try {
-            service = ServiceGenerator.createService(Api.class);
-        } catch (KeyManagementException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        Call<ResponseBody> call = service.getScore(mId);
-        call.enqueue(new Callback<ResponseBody>() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String rate = response.body().string();
-                    mScore = String.format("%.2f", Double.parseDouble(rate));
-                } catch (Exception ignored) {
-                    Log.e(">> Page-Firs-Error: ", ignored.getMessage() + " ");
-                    mScore = "3";
-                }
-                init();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(">> Load Error: ", t.getMessage() + " ");
-            }
-        });
+        score.setText(getString(R.string.rat1) + " "
+                + String.format("%.2f", Double.parseDouble(mScore)) + " "
+                + getString(R.string.of) + " " + 5);
+        init();
     }
 
     private void init() {
@@ -137,8 +96,10 @@ public class LyricActivity extends AppCompatActivity {
         ImageView comment = findViewById(R.id.comment);
         account = findViewById(R.id.account);
         comment.setOnClickListener(v -> showDialogComment());
-        account.setOnClickListener(v -> showDialogRegister());
-
+//        account.setOnClickListener(v -> showDialogRegister());
+        viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(new ViewPagerLyricAdapter(mName, mId, mSid,
+                getSupportFragmentManager(), getBaseContext()));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -164,6 +125,12 @@ public class LyricActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int arg0) {
 
+            }
+        });
+        account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(1);
             }
         });
     }
@@ -214,13 +181,10 @@ public class LyricActivity extends AppCompatActivity {
                             Toasty.success(LyricActivity.this, getString(R.string.send_ok)).show();
                         else
                             Toasty.error(LyricActivity.this, getString(R.string.not_done)).show();
-                        Log.e(">> Error-Comment: ", response.code() + " ");
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e(">> Error-Comment: ", t.getMessage() + " ");
-                        Toasty.error(LyricActivity.this, getString(R.string.no_net)).show();
                     }
                 });
                 dialog.dismiss();

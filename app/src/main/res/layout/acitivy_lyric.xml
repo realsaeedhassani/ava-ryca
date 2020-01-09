@@ -60,7 +60,7 @@
                     android:layout_height="@dimen/_25sdp"
                     android:layout_margin="16dp"
                     android:layout_weight="0.2"
-                    android:src="@drawable/ic_person"
+                    android:src="@drawable/ic_sms"
                     android:contentDescription="@string/todo" />
             </LinearLayout>
 
