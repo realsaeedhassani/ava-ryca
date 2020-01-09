@@ -1,4 +1,4 @@
-package com.lauzy.freedom.lyricview;
+package com.ryca.lyric;
 
 import org.junit.Test;
 
