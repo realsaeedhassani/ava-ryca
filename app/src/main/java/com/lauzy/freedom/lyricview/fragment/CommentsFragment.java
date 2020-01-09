@@ -2,7 +2,6 @@ package com.lauzy.freedom.lyricview.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.lauzy.freedom.lyricview.api.Api;
 import com.lauzy.freedom.lyricview.api.ServiceGenerator;
 import com.lauzy.freedom.lyricview.model.Comment;
 import com.lauzy.freedom.lyricview.model.DatumComment;
-import com.lauzy.freedom.lyricview.model.PaginateComment;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;

@@ -1,15 +1,5 @@
 <resources>
 
-<!--    <style name="AppTheme.StatusBarTransparent" parent="AppTheme" />-->
-<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
-<!--        <item name="colorControlActivated">@color/colorAccent</item>-->
-<!--        <item name="android:actionMenuTextColor">@color/colorAccent</item>-->
-<!--    </style>-->
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
