@@ -2,6 +2,7 @@ package com.lauzy.freedom.lyricview;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -9,6 +10,7 @@ import com.jakewharton.disklrucache.DiskLruCache;
 
 import java.io.IOException;
 
+import es.dmoral.toasty.Toasty;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -43,8 +45,8 @@ public class AppController extends Application {
         if (instance == null) {
             instance = this;
         }
-//        Toasty.Config.getInstance().setToastTypeface(Typeface.createFromAsset(getAssets(), "fonts/by.ttf")
-//        ) .apply();
+        Toasty.Config.getInstance().setToastTypeface(Typeface.createFromAsset(getAssets(),
+                "fonts/by.ttf")).apply();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/by.ttf")
                 .setFontAttrId(R.attr.fontPath)

@@ -1,9 +1,8 @@
 package com.lauzy.freedom.lyricview.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,22 +18,34 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lauzy.freedom.lyricview.R;
+import com.lauzy.freedom.lyricview.Utils.MyDividerItemDecoration;
 import com.lauzy.freedom.lyricview.acitivity.MainActivity;
 import com.lauzy.freedom.lyricview.adapter.ContactsAdapter;
-import com.lauzy.freedom.lyricview.Utils.MyDividerItemDecoration;
-import com.lauzy.freedom.lyricview.R;
-import com.lauzy.freedom.lyricview.model.Contact;
+import com.lauzy.freedom.lyricview.api.Api;
+import com.lauzy.freedom.lyricview.api.ServiceGenerator;
+import com.lauzy.freedom.lyricview.model.DatumSinger;
+import com.lauzy.freedom.lyricview.model.Singer;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SingerFragment extends Fragment implements ContactsAdapter.ContactsAdapterListener {
+    private static final int PAGE_START = 1;
     private View view;
     private RecyclerView recyclerView;
-    private List<Contact> contactList;
+    private List<Singer> contactList;
     private ContactsAdapter mAdapter;
     private Activity mActivity;
-    private SearchView searchView;
+    private int currentPage = PAGE_START;
+    private boolean loading = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     public SingerFragment() {
     }
@@ -47,40 +58,35 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_singer, container, false);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         contactList = new ArrayList<>();
-        for (int i = 1; i < 100; ++i) {
-            Contact c = new Contact();
-            c.setId(i);
-            c.setName("نام:‌ " + i);
-            c.setPhone("+98-" + (135484 * i));
-            c.setImage("https://persianblog.ir/upload/blog/5bdaf0de1579b-7490974.jpg");
-            contactList.add(c);
-        }
-        mAdapter = new ContactsAdapter(mActivity.getBaseContext(), contactList, this);
-//
-//        // white background notification bar
-//        whiteNotificationBar(recyclerView);
-//
-        RecyclerView.LayoutManager mLayoutManager =
+        LinearLayoutManager mLayoutManager =
                 new LinearLayoutManager(mActivity.getBaseContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new MyDividerItemDecoration(mActivity.getBaseContext(),
                 DividerItemDecoration.VERTICAL, 36));
+        mAdapter = new ContactsAdapter(mActivity.getBaseContext(), contactList, this);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    visibleItemCount = mLayoutManager.getChildCount();
+                    totalItemCount = mLayoutManager.getItemCount();
+                    pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
 
+                    if (loading) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            ++currentPage;
+                            loadNextPage();
+                        }
+                    }
+                }
+            }
+        });
+        loadFirstPage();
         return view;
-    }
-
-    private void whiteNotificationBar(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int flags = view.getSystemUiVisibility();
-            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            view.setSystemUiVisibility(flags);
-            mActivity.getWindow().setStatusBarColor(Color.WHITE);
-        }
     }
 
     @Override
@@ -89,8 +95,11 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = new SearchView(((MainActivity) mActivity).getSupportActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        SearchView searchView = new SearchView(((MainActivity) mActivity)
+                .getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item,
+                MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW |
+                        MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setActionView(item, searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -108,42 +117,6 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
         );
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//
-//
-//
-////       inflater.inflate(R.menu.menu_main, menu);
-////
-////        // Associate searchable configuration with the SearchView
-////        SearchManager searchManager = (SearchManager) mActivity.
-////                getBaseContext().
-////                getSystemService(Context.SEARCH_SERVICE);
-////        searchView = (SearchView) menu.findItem(R.id.action_search)
-////                .getActionView();
-////        searchView.setSearchableInfo(searchManager
-////                .getSearchableInfo(mActivity.getComponentName()));
-////        searchView.setMaxWidth(Integer.MAX_VALUE);
-////
-////        // listening to search query text change
-////        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-////            @Override
-////            public boolean onQueryTextSubmit(String query) {
-////                // filter recycler view when query submitted
-////                mAdapter.getFilter().filter(query);
-////                return false;
-////            }
-////
-////            @Override
-////            public boolean onQueryTextChange(String query) {
-////                // filter recycler view when text is changed
-////                mAdapter.getFilter().filter(query);
-////                return false;
-////            }
-////        });
-//    }
-//
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -154,11 +127,61 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
         return super.onOptionsItemSelected(item);
     }
 
+    private void loadNextPage() {
+        Api service = null;
+        try {
+            service = ServiceGenerator.createService(Api.class);
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        service.getSinger(currentPage).enqueue(new Callback<DatumSinger>() {
+            @Override
+            public void onResponse(Call<DatumSinger> call,
+                                   Response<DatumSinger> response) {
+                DatumSinger results = response.body();
+                Log.e(">> Page-Last: ", response.code() + " ");
+                if (results != null) {
+                    mAdapter.addAll(results.getData());
+                } else loading = false;
+            }
+
+            @Override
+            public void onFailure(Call<DatumSinger> call, Throwable t) {
+                Log.e(">> ERROR-SINGER: ", "LAST: " + t.getMessage());
+            }
+        });
+    }
+
+    private void loadFirstPage() {
+        Api service = null;
+        try {
+            service = ServiceGenerator.createService(Api.class);
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        Call<DatumSinger> call = service.getSinger(currentPage);
+        Log.e(">> SINGER: ", call.request().url() + " ");
+        call.enqueue(new Callback<DatumSinger>() {
+            @Override
+            public void onResponse(Call<DatumSinger> call, Response<DatumSinger> response) {
+
+                DatumSinger results = response.body();
+                Log.e(">> Page-First: ", response.code() + " ");
+                if (results != null) {
+                    mAdapter.addAll(results.getData());
+                } else loading = false;
+            }
+
+            @Override
+            public void onFailure(Call<DatumSinger> call, Throwable t) {
+                Log.e(">> ERROR-SINGER: ", "FIRST: " + t.getMessage());
+            }
+        });
+    }
 
     @Override
-    public void onContactSelected(Contact contact) {
-        AlbumsFragment fragment = new AlbumsFragment(mActivity, contact.getId());
-
+    public void onContactSelected(Singer contact) {
+        AlbumsFragment fragment = new AlbumsFragment(mActivity, contact.getId(), contact.getName());
         getFragmentManager().beginTransaction().
                 replace(R.id.frameLayout, fragment).
                 addToBackStack("singer").commit();

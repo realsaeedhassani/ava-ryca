@@ -12,20 +12,24 @@ import com.lauzy.freedom.lyricview.fragment.LyricViewFragment;
 public class ViewPagerLyricAdapter extends FragmentPagerAdapter {
     private Context mContext;
     private String mName;
+    private int mAid, mSid;
 
-    public ViewPagerLyricAdapter(String name, FragmentManager fm, Context context) {
+    public ViewPagerLyricAdapter(String name,
+                                 int aid, int sid, FragmentManager fm, Context context) {
         super(fm);
         mName = name;
         mContext = context;
+        mAid = aid;
+        mSid = sid;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new LyricViewFragment(mContext, mName);
+                return new LyricViewFragment(mContext, mName, mAid, mSid);
             case 1:
-                return new CommentsFragment(mContext);
+                return new CommentsFragment(mContext,mAid);
         }
         return null;
     }

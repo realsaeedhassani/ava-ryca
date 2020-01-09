@@ -39,6 +39,7 @@
     <color name="white">#ffffff</color>
 
     <color name="text_color">#646464</color>
+    <color name="text_color_comment">#535353</color>
     <color name="glide_slider_background_color">#000000</color>
     <color name="glide_slider_indicator_color">#FFFFFF</color>
     <color name="glide_slider_description_color">#FFFFFF</color>
@@ -56,7 +57,7 @@
     <color name="cat_teach">#F44336</color>
     <color name="cat_c">#B1D800</color>
 
-    <color name="background">#FCFCFC</color>
+    <color name="background">#fff</color>
     <color name="wait">#FF9000</color>
     <color name="redd">#DB0F49</color>
 
@@ -70,4 +71,9 @@
     <color name="card_shadow_2">#dddddd</color>
     <color name="fab">#5785A6</color>
     <color name="comment_color">#3F51B5</color>
+
+    <color name="rate_0">#FD2D1C</color>
+    <color name="rate_3">#03A9F4</color>
+    <color name="rate_5">#4caf50</color>
+
 </resources>

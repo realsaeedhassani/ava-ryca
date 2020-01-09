@@ -25,9 +25,10 @@
             <ImageView
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:src="@drawable/ic_comment_icon" />
+
             <TextView
                 android:id="@+id/dw_title"
                 android:layout_width="match_parent"
@@ -41,12 +42,13 @@
             <EditText
                 android:id="@+id/comment"
                 style="@style/CustomEditText"
-                android:textSize="@dimen/_12sdp"
                 android:layout_height="@dimen/_50sdp"
-                android:layoutDirection="rtl"
-                android:hint="@string/comment_guide"
                 android:layout_margin="@dimen/_5sdp"
-                android:maxLength="50" />
+                android:hint="@string/comment_guide"
+                android:layoutDirection="rtl"
+                android:maxLength="200"
+                android:textSize="@dimen/_12sdp" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,6 +57,7 @@
                 android:text="@string/rat_like"
                 android:textColor="#5F5F5F"
                 android:textSize="@dimen/_12sdp" />
+
             <com.lauzy.freedom.lyricview.Utils.SvgRatingBar
                 android:id="@+id/rate"
                 android:layout_width="wrap_content"
@@ -77,8 +80,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:src="@drawable/ic_send_comment" />
             </LinearLayout>
         </LinearLayout>

@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:gravity="top|center"
-                android:text="@string/ac_info_email"
+                android:text="@string/ac_city"
                 android:textColor="#5F5F5F"
                 android:textSize="@dimen/_12sdp" />
 
@@ -64,7 +64,7 @@
                 style="@style/CustomEditText"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
-                android:hint="@string/email_guide"
+                android:hint="@string/city_guide"
                 android:layoutDirection="rtl"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:maxLength="20"

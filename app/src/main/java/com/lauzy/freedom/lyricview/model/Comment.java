@@ -1,52 +1,94 @@
 package com.lauzy.freedom.lyricview.model;
 
-public class Comment {
-    private String name;
-    private String date;
-    private String comment;
-    private int id;
-    private int rate;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    public Comment() {
+public class Comment {
+
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+
+    @SerializedName("city")
+    @Expose
+    private String city;
+
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("comment")
+    @Expose
+    private String comment;
+    @SerializedName("album_id")
+    @Expose
+    private Integer albumId;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
+    @SerializedName("rate")
+    @Expose
+    private Integer rate;
+
+    @SerializedName("info")
+    @Expose
+    private String info;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Integer id) {
+        this.albumId = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String n) {
-        name = n;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String n) {
-        date = n;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getComment() {
         return comment;
     }
 
-    public void setComment(String n) {
-        comment = n;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int n) {
-        id = n;
-    }
-
-    public int getRate() {
+    public Integer getRate() {
         return rate;
     }
 
-    public void setRate(int n) {
-        rate = n;
+    public void setRate(Integer rate) {
+        this.rate = rate;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

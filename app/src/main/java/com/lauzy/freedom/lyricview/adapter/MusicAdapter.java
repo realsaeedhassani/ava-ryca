@@ -1,5 +1,6 @@
 package com.lauzy.freedom.lyricview.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.lauzy.freedom.lyricview.R;
-import com.lauzy.freedom.lyricview.model.Music;
+import com.lauzy.freedom.lyricview.Utils.CONSTANT;
+import com.lauzy.freedom.lyricview.model.Album;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +24,46 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder>
         implements Filterable {
     private Context context;
-    private List<Music> musicList;
-    private List<Music> musicListFilter;
+    private int mSid;
+    private List<Album> musicList;
+    private List<Album> musicListFilter;
     private MusicAdapterListener listener;
 
-    public MusicAdapter(Context context, List<Music> contactList, MusicAdapterListener listener) {
+    public MusicAdapter(Context context,
+                        int sid,
+                        List<Album> contactList,
+                        MusicAdapterListener listener) {
+        this.mSid = sid;
         this.context = context;
         this.listener = listener;
         this.musicList = contactList;
         this.musicListFilter = contactList;
+    }
+
+    public void addAll(List<Album> moveResults) {
+        for (Album result : moveResults) {
+            add(result);
+        }
+    }
+
+    private void add(Album movie) {
+        musicList.add(movie);
+        notifyItemInserted(musicList.size() - 1);
+    }
+
+    @Override
+    public int getItemCount() {
+        return musicList == null ? 0 : musicList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
@@ -41,21 +74,27 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         return new MyViewHolder(itemView);
     }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final Music contact = musicListFilter.get(position);
+        final Album contact = musicListFilter.get(position);
         holder.name.setText(contact.getName());
-        holder.phone.setText(contact.getSinger());
+        holder.cc.setText(context.getString(R.string.num_com) + " " + contact.getCc());
 
+        try {
+            holder.score.setText(context.getString(R.string.rat) + " " +  String.format("%.2f", Double.parseDouble(contact.getRate())));
+        } catch (Exception ignored) {
+            holder.score.setText(context.getString(R.string.rat) + " " + "3.0");
+        }
         Glide.with(context)
-                .load(contact.getUrl())
+                .load(
+                        CONSTANT.BASE_URL + "/files/"
+                                + mSid + "/"
+                                + contact.getId() + "/"
+                                + contact.getId() + ".png"
+                )
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.thumbnail);
-    }
-
-    @Override
-    public int getItemCount() {
-        return musicListFilter.size();
     }
 
     @Override
@@ -67,9 +106,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
                 if (charString.isEmpty()) {
                     musicListFilter = musicList;
                 } else {
-                    List<Music> filteredList = new ArrayList<>();
-                    for (Music row : musicList) {
-                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getUrl().contains(charSequence)) {
+                    List<Album> filteredList = new ArrayList<>();
+                    for (Album row : musicList) {
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
@@ -83,24 +122,25 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                musicListFilter = (ArrayList<Music>) filterResults.values;
+                musicListFilter = (ArrayList<Album>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
     }
 
     public interface MusicAdapterListener {
-        void onContactSelected(Music contact);
+        void onContactSelected(Album contact);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, phone;
+        TextView name, score, rate, cc;
         ImageView thumbnail;
 
         MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
-            phone = view.findViewById(R.id.phone);
+            score = view.findViewById(R.id.score);
+            cc = view.findViewById(R.id.cc);
             thumbnail = view.findViewById(R.id.thumbnail);
 
             view.setOnClickListener(view1 -> {

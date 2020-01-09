@@ -5,14 +5,11 @@
     android:background="?attr/selectableItemBackground"
     android:layoutDirection="rtl"
     android:textDirection="rtl"
-    android:clickable="true"
-    android:paddingLeft="@dimen/activity_margin"
-    android:paddingTop="@dimen/row_padding"
-    android:paddingRight="@dimen/activity_margin"
-    android:paddingBottom="@dimen/row_padding">
+    android:clickable="true" >
 
     <RelativeLayout
         android:id="@+id/nd"
+        android:background="@color/gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,48 +28,39 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5sdp"
             android:textColor="#A0A0A0"
-            android:textSize="@dimen/_12sdp"
-            android:layout_alignParentLeft="true"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_10sdp"
+            android:layout_alignParentLeft="true" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:layout_below="@id/nd" >
+        <TextView
+            android:id="@+id/rate"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_button"
+            android:textSize="@dimen/_12sdp"
+            android:text="@string/rat" />
     <TextView
         android:id="@+id/comment"
-        android:layout_below="@+id/nd"
+        android:layout_toLeftOf="@id/rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
-        android:padding="@dimen/_5sdp"
+        android:layout_centerVertical="true"
+        android:paddingRight="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_5sdp"
+        android:layout_alignParentLeft="true"
         android:textStyle="bold"
-        android:textColor="@color/text_color"
-        android:background="@drawable/selector_textview_image"
+        android:textColor="@color/text_color_comment"
         android:textSize="@dimen/_12sdp"/>
-    <LinearLayout
-        android:layout_below="@+id/comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_5sdp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/comment_color"
-            android:textSize="@dimen/_12sdp"
-            android:text="@string/rat" />
-        <com.lauzy.freedom.lyricview.Utils.SvgRatingBar
-            android:id="@+id/rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:isIndicator="true"
-            android:minHeight="25dp"
-            android:numStars="5"
-            android:progressDrawable="@drawable/selector_ratingbar"
-            android:layout_marginLeft="@dimen/_5sdp"
-            android:rating="4" />
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

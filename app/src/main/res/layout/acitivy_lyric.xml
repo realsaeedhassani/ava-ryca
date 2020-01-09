@@ -9,8 +9,8 @@
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="@dimen/_150sdp">
+        android:layout_height="@dimen/_150sdp"
+        android:background="@color/white">
 
         <ImageView
             android:layout_width="match_parent"
@@ -20,78 +20,81 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
                 <ImageView
                     android:id="@+id/comment"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_margin="16dp"
                     android:layout_weight="0.2"
                     android:src="@drawable/ic_comment" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginRight="14dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1.6"
-                    android:gravity="center_horizontal"
-                    android:text="Title Of The Music"
-                    android:textColor="#fff"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
-                <ImageView
-                    android:id="@+id/account"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:layout_weight="0.2"
-                    android:gravity="right"
-                    android:src="@drawable/ic_person" />
-            </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.6"
-                android:gravity="center_horizontal"
-                android:text="Adele"
-                android:textColor="#fff"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/score"
+                    android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:text="امتیاز ۴.۵ از ۵"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginRight="14dp"
+                    android:layout_weight="1.6"
+                    android:gravity="center_horizontal"
                     android:textColor="#fff"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_14sdp"
                     android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/account"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_margin="16dp"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="@string/todo" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_singer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.6"
+                android:gravity="center"
+                android:text="Singer"
+                android:textColor="#fff"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/ss"
+                android:textColor="#fff"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="@dimen/_110sdp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -103,9 +106,9 @@
 
             <ImageView
                 android:id="@+id/dot2"
-                android:padding="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_dot2" />
         </LinearLayout>
     </FrameLayout>
@@ -116,6 +119,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/frameLayout1"
         android:layout_alignParentBottom="true">
+
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
