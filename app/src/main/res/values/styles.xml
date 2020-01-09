@@ -18,21 +18,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Loading">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:foregroundGravity">center</item>
-    </style>
-    <style name="AppTheme.NoActionBar">
-        <item name="windowNoTitle">true</item>
-    </style>
+
     <style name="SplashActivity" parent="AppTheme">
         <item name="colorPrimaryDark">@color/white</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="CustomEditText">
         <item name="android:layout_width">match_parent</item>
@@ -46,9 +35,5 @@
         <item name="android:textSize">@dimen/_14sdp</item>
         <item name="android:textColorHint">#8A5A5A5A</item>
         <item name="android:shadowRadius">1</item>
-    </style>
-    <style name="ButtonTheme">
-        <item name="android:background">@drawable/shape_background_lyric</item>
-        <item name="android:padding">1dp</item>
     </style>
 </resources>

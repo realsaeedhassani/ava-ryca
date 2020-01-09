@@ -14,7 +14,9 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lauzy.freedom.lyricview.AppController;
 import com.lauzy.freedom.lyricview.R;
 import com.lauzy.freedom.lyricview.Utils.CONSTANT;
 import com.lauzy.freedom.lyricview.ViewLyric.Lrc;
@@ -112,13 +114,10 @@ public class LyricViewFragment extends Fragment
         });
     }
 
-    /**
-     * Method which updates the SeekBar primary progress by current song playing position
-     */
     private void primarySeekBarProgressUpdater() {
         try {
-            mSeekBar.setProgress((int) (((float) mMediaPlayer.getCurrentPosition() / mediaFileLengthInMilliseconds) * 100));
-            // This math construction give a percentage of "was playing"/"song length"
+            mSeekBar.setProgress((int) (((float)
+                    mMediaPlayer.getCurrentPosition() / mediaFileLengthInMilliseconds) * 100));
             mLrcView.updateTime(mMediaPlayer.getCurrentPosition());
             mTvStart.setText(LrcHelper.formatTime(mMediaPlayer.getCurrentPosition()));
             if (mMediaPlayer.isPlaying()) {
@@ -261,12 +260,12 @@ public class LyricViewFragment extends Fragment
 
         fab.setOnClickListener(v -> {
             try {
-                mMediaPlayer.setDataSource(
-                        CONSTANT.BASE_URL + "/files/"
-                                + SINGER + "/"
-                                + ALBUM + "/"
-                                + ALBUM + ".mp3"
-                );
+                HttpProxyCacheServer proxy = AppController.getProxy(mContext);
+                String proxyUrl = proxy.getProxyUrl(CONSTANT.BASE_URL + "/files/"
+                        + SINGER + "/"
+                        + ALBUM + "/"
+                        + ALBUM + ".mp3");
+                mMediaPlayer.setDataSource(proxyUrl);
                 mMediaPlayer.prepare();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -84,17 +84,12 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         if (rate < 3)
             holder.score.setBackgroundResource(R.drawable.round_count_0);
         else if (rate > 4)
-            holder.score.setBackgroundResource(R.drawable.round_count_1);
-        else
             holder.score.setBackgroundResource(R.drawable.round_count_2);
+        else
+            holder.score.setBackgroundResource(R.drawable.round_count_1);
 
         holder.score.setText(String.format("%.2f", Double.parseDouble(contact.getRate())));
 
-//        try {
-//            holder.score.setText(context.getString(R.string.rat) + " " +  String.format("%.2f", Double.parseDouble(contact.getRate())));
-//        } catch (Exception ignored) {
-//            holder.score.setText(context.getString(R.string.rat) + " " + "3.0");
-//        }
         Glide.with(context)
                 .load(
                         CONSTANT.BASE_URL + "/files/"

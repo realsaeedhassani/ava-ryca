@@ -1,24 +1,14 @@
 <resources>
     <string name="app_name">آوای رایکا</string>
-    <string name="home">خانه</string>
-    <string name="happy">جستجو</string>
-    <string name="room">تنظیمات</string>
 
     <string name="action_settings">Settings</string>
-    <string name="toolbar_title">Ryca</string>
-    <string name="action_search">Search</string>
-    <string name="search_hint">یه چیزی تایپ کن</string>
     <string name="comment">نظرت رو در مورد این آهنگ اینجا ارسال کن.</string>
     <string name="comment_guide">اینجا بنویس...</string>
-    <string name="send">بفرست</string>
     <string name="ss">امتیاز %s از ۵</string>
     <string name="ac_info">اینجا میتونی برا خودت یه نام و اسم شهرت رو وارد کنی.</string>
     <string name="name_guide"> نام</string>
-    <string name="email_guide">آدرس ایمیل: مثلا example@gmail.com</string>
-    <string name="ac_info_email">بروزرسانی های برنامه، پاسخ به نظراتت و درخواستهات به این ایمیل ارسال میشه.</string>
     <string name="rat_like">چند تا قلب واسه این آهنگ میذاری؟</string>
     <string name="rat">امتیاز: </string>
-    <string name="num_track">تعداد آهنگها:</string>
     <string name="company">آوای هوشمند رایکا</string>
     <string name="version">نسخه</string>
     <string name="ac_star">دلگرمی ما نظرات شماست. لطفا با ثبت نظر به ما کمک کنین تا این برنامه رو هر روز بهتر از روز قبل گسترش بدیم.</string>
@@ -29,13 +19,11 @@
     <string name="send_ok">پیامت ارسال شد. میتونی بخش کامنت ها اونو ببینی :)</string>
     <string name="error_name">نام کوتاه هست.</string>
     <string name="error_comment">توضیحات بیشتری بنویس.</string>
-    <string name="no_net">فک کنم نت گوشیت مشکل داره! یه بررسی بکن.</string>
     <string name="ac_city">اسم شهرت رو وارد کن تا تو بخش کامنتها ثبت بشه.</string>
     <string name="city_guide">اسم شهرت...</string>
     <string name="of">از</string>
     <string name="todo">TODO</string>
     <string name="num_com">تعداد نظرات:</string>
     <string name="ac_info_admin">مدیر سیستم میگه:‌</string>
-    <string name="ac_update">منتظر آپدیت بعدی ما باشید. لطفا با نظرات پر ستاره تون از ما حمایت کنین تا پشتوانه ای باشه تا این برنامه توسعه پیدا کنه البته با پیشنهادات شما.</string>
     <string name="rat1">امتیاز</string>
 </resources>

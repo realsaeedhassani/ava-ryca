@@ -127,7 +127,7 @@ public class LrcView extends View {
         mIconWidth = typedArray.getDimension(R.styleable.LrcView_playIconWidth, dp2px(context, 20));
         mIconHeight = typedArray.getDimension(R.styleable.LrcView_playIconHeight, dp2px(context, 20));
         mPlayDrawable = typedArray.getDrawable(R.styleable.LrcView_playIcon);
-        mPlayDrawable = mPlayDrawable == null ? ContextCompat.getDrawable(context, R.drawable.play_icon) : mPlayDrawable;
+        mPlayDrawable = mPlayDrawable == null ? ContextCompat.getDrawable(context, R.drawable.ic_play) : mPlayDrawable;
         isCurrentTextBold = typedArray.getBoolean(R.styleable.LrcView_isLrcCurrentTextBold, false);
         isLrcIndicatorTextBold = typedArray.getBoolean(R.styleable.LrcView_isLrcIndicatorTextBold, false);
         typedArray.recycle();
@@ -227,8 +227,8 @@ public class LrcView extends View {
             long time = mLrcData.get(indicatePosition).getTime();
             float timeWidth = mIndicatorPaint.measureText(LrcHelper.formatTime(time));
             mIndicatorPaint.setColor(mIndicatorLineColor);
-            canvas.drawLine(mPlayRect.right + mIconLineGap, getHeight() / 2f,
-                    getWidth() - timeWidth * 1.3f, getHeight() / 2f, mIndicatorPaint);
+//            canvas.drawLine(mPlayRect.right + mIconLineGap, getHeight() / 2f,
+//                    getWidth() - timeWidth * 1.3f, getHeight() / 2f, mIndicatorPaint);
             int baseX = (int) (getWidth() - timeWidth * 1.1f);
             float baseline = getHeight() / 2f - (mIndicatorPaint.descent() - mIndicatorPaint.ascent()) / 2 - mIndicatorPaint.ascent();
             mIndicatorPaint.setColor(mIndicatorTextColor);

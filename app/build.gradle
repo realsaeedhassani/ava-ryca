@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.github.eloyzone:jalali-calendar:1.0.0'
     implementation 'tyrantgit:explosionfield:1.0.1'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.danikula:videocache:2.7.1'
 }
 repositories {
     mavenCentral()

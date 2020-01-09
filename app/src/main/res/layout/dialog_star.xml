@@ -25,7 +25,6 @@
             android:padding="@dimen/_5sdp">
 
             <com.lauzy.freedom.lyricview.Utils.SvgRatingBar
-                android:id="@+id/rate1"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginLeft="@dimen/_5sdp"
@@ -37,7 +36,6 @@
                 android:progressDrawable="@drawable/selector_star"
                 android:rating="5" />
             <TextView
-                android:id="@+id/dw_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
