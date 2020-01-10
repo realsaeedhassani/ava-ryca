@@ -84,6 +84,8 @@ public class LyricActivity extends AppCompatActivity {
         singer.setText(mSinger);
         title.setText(mName);
         TextView score = findViewById(R.id.score);
+        if (mScore == null)
+            mScore = "5.00";
         score.setText(getString(R.string.rat1) + " "
                 + String.format("%.2f", Double.parseDouble(mScore)) + " "
                 + getString(R.string.of) + " " + 5);

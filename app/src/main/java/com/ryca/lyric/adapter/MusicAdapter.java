@@ -80,7 +80,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         final Album contact = musicListFilter.get(position);
         holder.name.setText(contact.getName());
         holder.cc.setText(context.getString(R.string.num_com) + " " + contact.getCc());
-        double rate = Double.parseDouble(contact.getRate());
+        double rate = 5;
+        if (contact.getRate() != null)
+            rate = Double.parseDouble(contact.getRate());
         if (rate < 3)
             holder.score.setBackgroundResource(R.drawable.round_count_0);
         else if (rate > 4)
@@ -88,14 +90,14 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         else
             holder.score.setBackgroundResource(R.drawable.round_count_1);
 
-        holder.score.setText(String.format("%.2f", Double.parseDouble(contact.getRate())));
+        holder.score.setText(String.format("%.2f", rate));
 
         Glide.with(context)
                 .load(
                         CONSTANT.BASE_URL + "/files/"
                                 + mSid + "/"
                                 + contact.getId() + "/"
-                                + contact.getId() + ".png"
+                                + contact.getId() + ".jpeg"
                 )
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.thumbnail);

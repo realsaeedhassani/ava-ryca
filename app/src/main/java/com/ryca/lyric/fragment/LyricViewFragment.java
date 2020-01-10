@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,8 +72,8 @@ public class LyricViewFragment extends Fragment
     };
 
     public LyricViewFragment(Context context, String name, int mAid, int mSid) {
-        SINGER = "3";//String.valueOf(mSid);
-        ALBUM = "1";// String.valueOf(mAid);
+        SINGER = String.valueOf(mSid);
+        ALBUM = String.valueOf(mAid);
         mContext = context;
         serviceGenerator = ServiceGenerator.getInstance(mContext);
     }
@@ -96,6 +97,7 @@ public class LyricViewFragment extends Fragment
         primarySeekBarProgressUpdater();
 
         Call<ResponseBody> call = service.getLrc(SINGER, ALBUM, ALBUM + ".lrc");
+        Log.e(">> URL: ", call.request().url() + " ");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -128,124 +130,6 @@ public class LyricViewFragment extends Fragment
         }
     }
 
-//    private void play() {
-//
-//        try {
-//            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-//                clearMediaPlayer();
-//                mSeekBar.setProgress(0);
-//                wasPlaying = true;
-//                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-//                        android.R.drawable.ic_media_play));
-//            }
-//            if (!wasPlaying) {
-//                if (mMediaPlayer == null) {
-//                    mMediaPlayer = new MediaPlayer();
-//                }
-//                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-//                        android.R.drawable.ic_media_pause));
-//
-//                new AudioStreamWorkerTask(mContext, new OnCacheCallback() {
-//                    @Override
-//                    public void onSuccess(FileInputStream fileInputStream) {
-//                        if (fileInputStream != null) {
-//                            mMediaPlayer = new MediaPlayer();
-//                            try {
-//                                mMediaPlayer.setDataSource(fileInputStream.getFD());
-//                                mMediaPlayer.prepare();
-//                                mMediaPlayer.setVolume(1f, 1f);
-//                                mMediaPlayer.setLooping(false);
-//                                mMediaPlayer.start();
-//                                mSeekBar.setMax(mMediaPlayer.getDuration());
-//                                mHandler.post(mRunnable);
-//                                fileInputStream.close();
-//                            } catch (IOException | IllegalStateException e) {
-//                            }
-//                        } else {
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//                    }
-//                }).execute(CONSTANT.BASE_URL + "/files/"
-//                        + SINGER + "/"
-//                        + ALBUM + "/"
-//                        + ALBUM + ".mp3");
-//            }
-//            wasPlaying = false;
-//        } catch (Exception e) {
-//        }
-//    }
-
-    private void init() {
-        try {
-            fab = view.findViewById(R.id.fab);
-            fabRepeat = view.findViewById(R.id.fab_repeat);
-            mSeekBar = view.findViewById(R.id.seek_play);
-            mTvStart = view.findViewById(R.id.tv_start);
-            fab.setOnClickListener(v -> {
-                if (wasPlaying) {
-                    mMediaPlayer.pause();
-                    mLrcView.pause();
-                    fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-                            android.R.drawable.ic_media_play));
-                    wasPlaying = false;
-                } else {
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.start();
-                        mLrcView.resume();
-                    }
-                    fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-                            android.R.drawable.ic_media_pause));
-                    wasPlaying = true;
-                }
-            });
-            fabRepeat.setOnClickListener(v -> {
-                if (repeate) {
-                    mMediaPlayer.setLooping(false);
-                    fabRepeat.setImageDrawable(ContextCompat.getDrawable(mContext,
-                            R.drawable.ic_repeat));
-                    repeate = false;
-                } else {
-                    mMediaPlayer.setLooping(true);
-                    fabRepeat.setImageDrawable(ContextCompat.getDrawable(mContext,
-                            R.drawable.ic_repeat_active));
-                    repeate = true;
-                }
-            });
-            mLrcView = view.findViewById(R.id.lrc_view);
-            mLrcView.setLrcData(mLRC);
-            mLrcView.setOnPlayIndicatorLineListener((time, content) -> mMediaPlayer.seekTo((int) time));
-            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
-                        mHandler.removeCallbacks(mRunnable);
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    mHandler.post(mRunnable);
-                    mMediaPlayer.seekTo(seekBar.getProgress());
-                }
-            });
-
-        } catch (Exception ex) {
-        }
-    }
-
-    private void clearMediaPlayer() {
-        mMediaPlayer.stop();
-        mMediaPlayer.release();
-    }
-
     private void initView() {
         fab = view.findViewById(R.id.fab);
         fabRepeat = view.findViewById(R.id.fab_repeat);
@@ -267,23 +151,24 @@ public class LyricViewFragment extends Fragment
                         + ALBUM + ".mp3");
                 mMediaPlayer.setDataSource(proxyUrl);
                 mMediaPlayer.prepare();
+
+                mediaFileLengthInMilliseconds = mMediaPlayer.getDuration();
+
+                if (!mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.start();
+                    fab.setImageDrawable(ContextCompat.getDrawable(mContext,
+                            android.R.drawable.ic_media_pause));
+                } else {
+                    mMediaPlayer.pause();
+                    fab.setImageDrawable(ContextCompat.getDrawable(mContext,
+                            android.R.drawable.ic_media_play));
+                }
+
+                primarySeekBarProgressUpdater();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            mediaFileLengthInMilliseconds = mMediaPlayer.getDuration();
-
-            if (!mMediaPlayer.isPlaying()) {
-                mMediaPlayer.start();
-                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-                        android.R.drawable.ic_media_pause));
-            } else {
-                mMediaPlayer.pause();
-                fab.setImageDrawable(ContextCompat.getDrawable(mContext,
-                        android.R.drawable.ic_media_play));
-            }
-
-            primarySeekBarProgressUpdater();
         });
         fabRepeat.setOnClickListener(v -> {
             if (repeate) {

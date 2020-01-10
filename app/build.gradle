@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.danikula:videocache:2.7.1'
     implementation 'com.infstory:proguard-snippets:1.0.0'
+    // 'com.github.huzenan:EasyPullLayout:v1.0.0'
 }
 repositories {
     mavenCentral()

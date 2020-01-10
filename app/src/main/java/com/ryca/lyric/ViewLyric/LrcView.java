@@ -242,7 +242,7 @@ public class LrcView extends View {
         if (staticLayout == null) {
             mTextPaint.setTextSize(mLrcTextSize);
             staticLayout = new StaticLayout(text, mTextPaint, getLrcWidth(),
-                    Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
+                    Layout.Alignment.ALIGN_CENTER, 1f, 0f, false);
             mLrcMap.put(text, staticLayout);
         }
         canvas.save();
@@ -257,7 +257,7 @@ public class LrcView extends View {
         mTextPaint.setTextSize(mNoLrcTextSize);
         canvas.save();
         StaticLayout staticLayout = new StaticLayout(mDefaultContent, mTextPaint,
-                getLrcWidth(), Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
+                getLrcWidth(), Layout.Alignment.ALIGN_CENTER, 1f, 0f, false);
         canvas.translate(getLrcWidth() / 2f + getPaddingLeft(), getLrcHeight() / 2f);
         staticLayout.draw(canvas);
         canvas.restore();
@@ -333,7 +333,7 @@ public class LrcView extends View {
         if (staticLayout == null) {
             mTextPaint.setTextSize(mLrcTextSize);
             staticLayout = new StaticLayout(text, mTextPaint,
-                    getLrcWidth(), Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
+                    getLrcWidth(), Layout.Alignment.ALIGN_CENTER, 1f, 0f, false);
             mStaticLayoutHashMap.put(text, staticLayout);
         }
         return staticLayout.getHeight();

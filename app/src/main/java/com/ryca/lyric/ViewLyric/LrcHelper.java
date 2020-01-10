@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 public class LrcHelper {
 
     private static final String CHARSET = "utf-8";
-    //[03:56.00][03:18.00][02:06.00][01:07.00]原谅我这一生不羁放纵爱自由
     private static final String LINE_REGEX = "((\\[\\d{2}:\\d{2}\\.\\d{2}])+)(.*)";
     private static final String TIME_REGEX = "\\[(\\d{2}):(\\d{2})\\.(\\d{2})]";
 
@@ -46,21 +45,28 @@ public class LrcHelper {
         List<Lrc> lrcs = new ArrayList<>();
         InputStreamReader isr = null;
         BufferedReader br = null;
+        int i = 1;
         try {
             isr = new InputStreamReader(inputStream, CHARSET);
             br = new BufferedReader(isr);
             String line;
+            long lrcTime = 0;
             try {
                 while ((line = br.readLine()) != null) {
-                    List<Lrc> lrcList = parseLrc(line);
+//                    if (i > 8)
+//                        line = line + br.readLine();
+                    List<Lrc> lrcList = parseLrc(line, lrcTime);
                     if (lrcList != null && lrcList.size() != 0) {
+                        lrcTime = lrcList.get(0).getTime();
                         lrcs.addAll(lrcList);
                     }
+                    ++i;
                 }
             } catch (Exception ignored) {
+                Log.e(">> MSG: ", ignored.getMessage() + " ");
             }
-            sortLrcs(lrcs);
-            return lrcs;
+//            sortLrcs(lrcs);
+            return sortLrcs(lrcs);
         } catch (UnsupportedEncodingException ignored) {
             Log.e(">> LRC2: ", ignored.getMessage() + " ");
         } finally {
@@ -79,20 +85,33 @@ public class LrcHelper {
         return lrcs;
     }
 
-    private static void sortLrcs(List<Lrc> lrcs) {
-        Collections.sort(lrcs, (o1, o2) -> (int) (o1.getTime() - o2.getTime()));
+    private static List<Lrc> sortLrcs(List<Lrc> lrcs) {
+        Log.e(">> LRC-SORT: ", lrcs.size() + " ");
+        List<Lrc> lrcList = new ArrayList<>();
+        for (int i = 3; i < lrcs.size(); i += 2) {
+            Lrc lrc = new Lrc();
+            lrc.setText(lrcs.get(i).getText() + "\n" + lrcs.get(i + 1).getText());
+            lrc.setTime(lrcs.get(i).getTime());
+            lrcList.add(lrc);
+
+        }
+        Collections.sort(lrcList, (o1, o2) -> (int) (o1.getTime() - o2.getTime()));
+        return lrcList;
     }
 
-    private static List<Lrc> parseLrc(String lrcLine) {
+    private static List<Lrc> parseLrc(String lrcLine, long lrcTime) {
         if (lrcLine.trim().isEmpty()) {
             return null;
         }
         List<Lrc> lrcs = new ArrayList<>();
         Matcher matcher = Pattern.compile(LINE_REGEX).matcher(lrcLine);
         if (!matcher.matches()) {
-            return null;
+            Lrc lrc = new Lrc();
+            lrc.setTime(lrcTime);
+            lrc.setText(lrcLine);
+            lrcs.add(lrc);
+            return lrcs;
         }
-
         String time = matcher.group(1);
         String content = matcher.group(3);
         Matcher timeMatcher = Pattern.compile(TIME_REGEX).matcher(time);
@@ -109,6 +128,7 @@ public class LrcHelper {
                 lrcs.add(lrc);
             }
         }
+
         return lrcs;
     }
 

@@ -2,6 +2,7 @@ package com.ryca.lyric.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 .load(CONSTANT.BASE_URL
                         + "/files/"
                         + contact.getId() + "/"
-                        + contact.getId() + ".png")
+                        + contact.getId() + ".jpeg")
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.thumbnail);
     }
