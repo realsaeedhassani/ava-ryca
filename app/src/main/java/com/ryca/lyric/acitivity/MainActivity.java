@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ryca.lyric.BuildConfig;
 import com.ryca.lyric.R;
 import com.ryca.lyric.api.Api;
 import com.ryca.lyric.api.ServiceGenerator;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
 
+        TextView version = findViewById(R.id.version);
+        version.setText(getString(R.string.version + " " + BuildConfig.VERSION_NAME));
 
         account = findViewById(R.id.account);
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
