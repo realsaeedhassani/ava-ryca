@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
         TextView version = findViewById(R.id.version);
-        version.setText(getString(R.string.version + " " + BuildConfig.VERSION_NAME));
+        version.setText(getString(R.string.version) +
+                " " + BuildConfig.VERSION_NAME);
 
         account = findViewById(R.id.account);
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
