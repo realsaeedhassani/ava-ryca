@@ -71,7 +71,7 @@ public class LyricViewFragment extends Fragment
     };
 
     public LyricViewFragment(Context context, String name, int mAid, int mSid) {
-        SINGER = "2";//String.valueOf(mSid);
+        SINGER = "3";//String.valueOf(mSid);
         ALBUM = "1";// String.valueOf(mAid);
         mContext = context;
         serviceGenerator = ServiceGenerator.getInstance(mContext);
