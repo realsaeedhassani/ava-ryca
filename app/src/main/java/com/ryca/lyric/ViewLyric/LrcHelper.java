@@ -45,7 +45,6 @@ public class LrcHelper {
         List<Lrc> lrcs = new ArrayList<>();
         InputStreamReader isr = null;
         BufferedReader br = null;
-        int i = 1;
         try {
             isr = new InputStreamReader(inputStream, CHARSET);
             br = new BufferedReader(isr);
@@ -53,22 +52,18 @@ public class LrcHelper {
             long lrcTime = 0;
             try {
                 while ((line = br.readLine()) != null) {
-//                    if (i > 8)
-//                        line = line + br.readLine();
+                    Log.e(">> LRC: ", line);
                     List<Lrc> lrcList = parseLrc(line, lrcTime);
                     if (lrcList != null && lrcList.size() != 0) {
                         lrcTime = lrcList.get(0).getTime();
                         lrcs.addAll(lrcList);
                     }
-                    ++i;
                 }
             } catch (Exception ignored) {
                 Log.e(">> MSG: ", ignored.getMessage() + " ");
             }
-//            sortLrcs(lrcs);
             return sortLrcs(lrcs);
         } catch (UnsupportedEncodingException ignored) {
-            Log.e(">> LRC2: ", ignored.getMessage() + " ");
         } finally {
             try {
                 if (isr != null) {
@@ -79,21 +74,18 @@ public class LrcHelper {
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
-                Log.e(">> LRC3: ", e1.getMessage() + " ");
             }
         }
         return lrcs;
     }
 
     private static List<Lrc> sortLrcs(List<Lrc> lrcs) {
-        Log.e(">> LRC-SORT: ", lrcs.size() + " ");
         List<Lrc> lrcList = new ArrayList<>();
         for (int i = 3; i < lrcs.size(); i += 2) {
             Lrc lrc = new Lrc();
             lrc.setText(lrcs.get(i).getText() + "\n" + lrcs.get(i + 1).getText());
             lrc.setTime(lrcs.get(i).getTime());
             lrcList.add(lrc);
-
         }
         Collections.sort(lrcList, (o1, o2) -> (int) (o1.getTime() - o2.getTime()));
         return lrcList;

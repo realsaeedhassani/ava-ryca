@@ -26,6 +26,7 @@ import com.ryca.lyric.ViewLyric.LrcView;
 import com.ryca.lyric.api.Api;
 import com.ryca.lyric.api.ServiceGenerator;
 
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -45,37 +46,21 @@ public class LyricViewFragment extends Fragment
     private static final String TAG = LyricViewFragment.class.getName();
     private final Handler handler = new Handler();
     private int mediaFileLengthInMilliseconds;
-    private ServiceGenerator serviceGenerator;
     private View view;
-    private boolean wasPlaying = false, repeate = false;
+    private boolean repeate = false;
     private FloatingActionButton fab, fabRepeat;
     private Context mContext;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private LrcView mLrcView;
-    private Handler mHandler = new Handler();
     private SeekBar mSeekBar;
     private TextView mTvStart;
     private List<Lrc> mLRC;
     private String SINGER, ALBUM;
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                int currentPosition = mMediaPlayer.getCurrentPosition();
-                mLrcView.updateTime(currentPosition);
-                mSeekBar.setProgress(currentPosition);
-                mTvStart.setText(LrcHelper.formatTime(currentPosition));
-                mHandler.postDelayed(this, 100);
-            } catch (IllegalStateException ignored) {
-            }
-        }
-    };
 
     public LyricViewFragment(Context context, String name, int mAid, int mSid) {
         SINGER = String.valueOf(mSid);
         ALBUM = String.valueOf(mAid);
         mContext = context;
-        serviceGenerator = ServiceGenerator.getInstance(mContext);
     }
 
     @Override
@@ -97,7 +82,6 @@ public class LyricViewFragment extends Fragment
         primarySeekBarProgressUpdater();
 
         Call<ResponseBody> call = service.getLrc(SINGER, ALBUM, ALBUM + ".lrc");
-        Log.e(">> URL: ", call.request().url() + " ");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -109,7 +93,6 @@ public class LyricViewFragment extends Fragment
                     Toasty.info(mContext, mContext.getString(R.string.not_done), Toasty.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -123,7 +106,7 @@ public class LyricViewFragment extends Fragment
             mLrcView.updateTime(mMediaPlayer.getCurrentPosition());
             mTvStart.setText(LrcHelper.formatTime(mMediaPlayer.getCurrentPosition()));
             if (mMediaPlayer.isPlaying()) {
-                Runnable notification = () -> primarySeekBarProgressUpdater();
+                Runnable notification = this::primarySeekBarProgressUpdater;
                 handler.postDelayed(notification, 80);
             }
         } catch (Exception ignored) {
@@ -141,29 +124,32 @@ public class LyricViewFragment extends Fragment
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
-
+        HttpProxyCacheServer proxy = AppController.getProxy(mContext);
+        String proxyUrl = proxy.getProxyUrl(CONSTANT.BASE_URL + "/files/"
+                + SINGER + "/"
+                + ALBUM + "/"
+                + ALBUM + ".mp3");
+        try {
+            mMediaPlayer.setDataSource(proxyUrl);
+            mMediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaFileLengthInMilliseconds = mMediaPlayer.getDuration();
         fab.setOnClickListener(v -> {
             try {
-                HttpProxyCacheServer proxy = AppController.getProxy(mContext);
-                String proxyUrl = proxy.getProxyUrl(CONSTANT.BASE_URL + "/files/"
-                        + SINGER + "/"
-                        + ALBUM + "/"
-                        + ALBUM + ".mp3");
-                mMediaPlayer.setDataSource(proxyUrl);
-                mMediaPlayer.prepare();
 
-                mediaFileLengthInMilliseconds = mMediaPlayer.getDuration();
 
                 if (!mMediaPlayer.isPlaying()) {
                     mMediaPlayer.start();
                     fab.setImageDrawable(ContextCompat.getDrawable(mContext,
                             android.R.drawable.ic_media_pause));
+
                 } else {
                     mMediaPlayer.pause();
                     fab.setImageDrawable(ContextCompat.getDrawable(mContext,
                             android.R.drawable.ic_media_play));
                 }
-
                 primarySeekBarProgressUpdater();
             } catch (Exception e) {
                 e.printStackTrace();

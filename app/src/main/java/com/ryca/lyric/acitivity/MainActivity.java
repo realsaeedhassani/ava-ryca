@@ -3,10 +3,11 @@ package com.ryca.lyric.acitivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,27 +57,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
 
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
         TextView version = findViewById(R.id.version);
         version.setText(getString(R.string.version) +
                 " " + BuildConfig.VERSION_NAME);
 
         account = findViewById(R.id.account);
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 
         account.setOnClickListener(v -> showDialogRegister());
-        findViewById(R.id.star).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogStar();
-            }
-        });
+        findViewById(R.id.star).setOnClickListener(v -> showDialogStar());
 
-        findViewById(R.id.admin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAdminMessage();
-            }
-        });
+        findViewById(R.id.admin).setOnClickListener(v -> showAdminMessage());
     }
 
     private void showAdminMessage() {
@@ -116,8 +109,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    protected void onResume() {
+        super.onResume();
+        if (prefs.getBoolean("firstrun", true)) {
+            showDialogStar();
+            prefs.edit().putBoolean("firstrun", false).apply();
+        }
     }
 
     private void showDialogRegister() {
@@ -159,8 +156,17 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_star);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        FloatingActionButton fab = dialog.findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_EDIT);
+            intent.setData(Uri.parse("bazaar://details?id=" + "com.ryca.lyric"));
+            intent.setPackage("com.farsitel.bazaar");
+            startActivity(intent);
+            dialog.dismiss();
+        });
         dialog.show();
     }
+
 }

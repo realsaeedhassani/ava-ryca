@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="#C7C7C7"
-            android:textSize="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
