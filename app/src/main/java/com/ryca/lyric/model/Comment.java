@@ -76,6 +76,10 @@ public class Comment {
         this.rate = rate;
     }
 
+    public String getInfo() {
+        return this.info;
+    }
+
     public void setInfo(String info) {
         this.info = info;
     }

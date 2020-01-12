@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 .duration(1000)
                 .playOn(findViewById(R.id.icon));
         YoYo.with(Techniques.Shake)
-                .duration(1500)
+                .duration(1000)
                 .playOn(findViewById(R.id.icon));
         YoYo.with(Techniques.FadeIn)
                 .duration(1000)
@@ -58,6 +58,6 @@ public class SplashActivity extends AppCompatActivity {
             SplashActivity.this.startActivity(intent);
             SplashActivity.this.finish();
             overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-        }, 5000);
+        }, 3000);
     }
 }

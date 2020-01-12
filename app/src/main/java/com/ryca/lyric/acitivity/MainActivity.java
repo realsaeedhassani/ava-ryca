@@ -111,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (prefs.getBoolean("firstrun", true)) {
-            showDialogStar();
-            prefs.edit().putBoolean("firstrun", false).apply();
-        }
+//        if (prefs.getBoolean("firstrun", true)) {
+//            showDialogStar();
+//            prefs.edit().putBoolean("firstrun", false).apply();
+//        }
     }
 
     private void showDialogRegister() {
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_star);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         FloatingActionButton fab = dialog.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {

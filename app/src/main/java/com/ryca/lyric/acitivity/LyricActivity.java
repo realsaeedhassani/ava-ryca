@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import com.ryca.lyric.api.Api;
 import com.ryca.lyric.api.ServiceGenerator;
 import com.ryca.lyric.model.Comment;
 
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -90,6 +92,7 @@ public class LyricActivity extends AppCompatActivity {
                 + String.format("%.2f", Double.parseDouble(mScore)) + " "
                 + getString(R.string.of) + " " + 5);
         init();
+        Log.e(">> DATA: ", mName + " * " + mSinger + " * " + mScore + " * " + mId + " * " + mSid);
     }
 
     private void init() {
@@ -160,10 +163,13 @@ public class LyricActivity extends AppCompatActivity {
                 Comment comment = new Comment();
                 comment.setComment(text.getText().toString().trim().replaceAll("\\s+", " "));
                 comment.setRate((int) rate.getRating());
-                comment.setInfo(getDeviceID().trim().replaceAll("\\s+", " "));
+                String di = getDeviceID().trim().replaceAll("\\s+", " ");
+                comment.setInfo(di);
+                Log.e(">> DI: ", comment.getInfo() + " ");
                 comment.setName(name);
                 comment.setCity(city);
                 comment.setAlbumId(mId);
+                Log.e(">> IDD: ", comment.getAlbumId() + " ");
                 if (text.getText().toString().length() < 5) {
                     Toasty.error(LyricActivity.this, getString(R.string.error_comment), Toasty.LENGTH_LONG).show();
                     return;
@@ -181,8 +187,13 @@ public class LyricActivity extends AppCompatActivity {
                                            Response<ResponseBody> response) {
                         if (response.code() == 200)
                             Toasty.success(LyricActivity.this, getString(R.string.send_ok)).show();
-                        else
-                            Toasty.error(LyricActivity.this, getString(R.string.not_done)).show();
+                        else {
+                            try {
+                                Log.e(">> Error: ", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
 
                     @Override
