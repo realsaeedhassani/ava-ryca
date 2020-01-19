@@ -124,7 +124,7 @@ public class LyricViewFragment extends Fragment
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         HttpProxyCacheServer proxy = AppController.getProxy(mContext);
-        String proxyUrl = proxy.getProxyUrl(CONSTANT.BASE_URL + "/files/"
+        String proxyUrl = proxy.getProxyUrl(CONSTANT.BASE_URL + "files/"
                 + SINGER + "/"
                 + ALBUM + "/"
                 + ALBUM + ".mp3");

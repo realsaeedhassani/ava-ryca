@@ -31,6 +31,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -175,9 +176,12 @@ public class SingerFragment extends Fragment implements ContactsAdapter.Contacts
 
     @Override
     public void onContactSelected(Singer contact) {
-        AlbumsFragment fragment = new AlbumsFragment(mActivity, contact.getId(), contact.getName());
-        getFragmentManager().beginTransaction().
-                replace(R.id.frameLayout, fragment).
-                addToBackStack("singer").commit();
+        if (contact.getCount()>0) {
+            AlbumsFragment fragment = new AlbumsFragment(mActivity, contact.getId(), contact.getName());
+            getFragmentManager().beginTransaction().
+                    replace(R.id.frameLayout, fragment).
+                    addToBackStack("singer").commit();
+        }else
+            Toasty.success(mActivity.getBaseContext(), getString(R.string.add_album), Toasty.LENGTH_LONG).show();
     }
 }

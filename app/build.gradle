@@ -6,8 +6,8 @@ android {
         applicationId "com.ryca.lyric"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 7
+        versionName "1.0.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

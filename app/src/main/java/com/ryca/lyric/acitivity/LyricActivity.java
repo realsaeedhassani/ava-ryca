@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,7 +91,6 @@ public class LyricActivity extends AppCompatActivity {
                 + String.format("%.2f", Double.parseDouble(mScore)) + " "
                 + getString(R.string.of) + " " + 5);
         init();
-        Log.e(">> DATA: ", mName + " * " + mSinger + " * " + mScore + " * " + mId + " * " + mSid);
     }
 
     private void init() {
@@ -101,7 +99,6 @@ public class LyricActivity extends AppCompatActivity {
         ImageView comment = findViewById(R.id.comment);
         account = findViewById(R.id.account);
         comment.setOnClickListener(v -> showDialogComment());
-//        account.setOnClickListener(v -> showDialogRegister());
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(new ViewPagerLyricAdapter(mName, mId, mSid,
                 getSupportFragmentManager(), getBaseContext()));
@@ -132,12 +129,7 @@ public class LyricActivity extends AppCompatActivity {
 
             }
         });
-        account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewPager.setCurrentItem(1);
-            }
-        });
+        account.setOnClickListener(v -> viewPager.setCurrentItem(1));
     }
 
     private void showDialogComment() {
@@ -165,11 +157,9 @@ public class LyricActivity extends AppCompatActivity {
                 comment.setRate((int) rate.getRating());
                 String di = getDeviceID().trim().replaceAll("\\s+", " ");
                 comment.setInfo(di);
-                Log.e(">> DI: ", comment.getInfo() + " ");
                 comment.setName(name);
                 comment.setCity(city);
                 comment.setAlbumId(mId);
-                Log.e(">> IDD: ", comment.getAlbumId() + " ");
                 if (text.getText().toString().length() < 5) {
                     Toasty.error(LyricActivity.this, getString(R.string.error_comment), Toasty.LENGTH_LONG).show();
                     return;
@@ -246,6 +236,7 @@ public class LyricActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(LyricActivity.this, MainActivity.class));
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+        finish();
     }
 
     public String getDeviceID() {
@@ -269,34 +260,12 @@ public class LyricActivity extends AppCompatActivity {
         if (m != null) {
             m.update(m_szLongID.getBytes(), 0, m_szLongID.length());
         }
-        byte[] p_md5Data = new byte[0];
-        if (m != null) {
-            p_md5Data = m.digest();
-        }
-
-        StringBuilder m_szUniqueID = new StringBuilder();
-        for (byte p_md5Datum : p_md5Data) {
-            int b = (0xFF & p_md5Datum);
-            if (b <= 0xF)
-                m_szUniqueID.append("0");
-            m_szUniqueID.append(Integer.toHexString(b));
-        }
-        m_szUniqueID = new StringBuilder(m_szUniqueID.toString().toUpperCase());
-
-        String info = "MODEL: " + Build.MODEL + "#" +
-                "ID: " + Build.ID + "#" +
-                "Manufacture: " + Build.MANUFACTURER + "#" +
-                "type: " + Build.TYPE + "#" +
-                "user: " + Build.USER + "#" +
-                "BASE: " + Build.VERSION_CODES.BASE + "#" +
-                "INCREMENTAL " + Build.VERSION.INCREMENTAL + "#" +
-                "SDK  " + Build.VERSION.SDK + "#" +
-                "BOARD: " + Build.BOARD + "#" +
-                "BRAND " + Build.BRAND + "#" +
-                "HOST " + Build.HOST + "#" +
-                "FINGERPRINT: " + Build.FINGERPRINT + "#" +
-                "Version Code: " + Build.VERSION.RELEASE;
-        return "UniqueID: " + m_szUniqueID.toString() + "#" + info;
+        return getString(R.string.id) + "" + "#" +
+                getString(R.string.if_model) + Build.MODEL + "#" +
+                getString(R.string.if_manu) + Build.MANUFACTURER + "#" +
+                getString(R.string.if_sd) + Build.VERSION.SDK + "#" +
+                getString(R.string.if_brd) + Build.BRAND + "#" +
+                getString(R.string.if_xyz) + Build.VERSION.RELEASE;
 
     }
 }

@@ -94,7 +94,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
         Glide.with(context)
                 .load(
-                        CONSTANT.BASE_URL + "/files/"
+                        CONSTANT.BASE_URL + "files/"
                                 + mSid + "/"
                                 + contact.getId() + "/"
                                 + contact.getId() + ".jpeg"

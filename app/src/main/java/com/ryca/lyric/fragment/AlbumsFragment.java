@@ -35,7 +35,7 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
     private static final int PAGE_START = 1;
     View view;
     private Activity mActivity;
-    private int mId, mSID;
+    private int mId;
     private String mSinger;
     private RecyclerView recyclerView;
     private List<Album> mMusicList;
@@ -65,9 +65,6 @@ public class AlbumsFragment extends Fragment implements MusicAdapter.MusicAdapte
                 mId,
                 mMusicList,
                 this);
-
-        // white background notification bar
-        // whiteNotificationBar(recyclerView);
 
         LinearLayoutManager mLayoutManager =
                 new LinearLayoutManager(mActivity.getBaseContext());
