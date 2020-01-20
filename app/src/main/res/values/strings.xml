@@ -16,14 +16,14 @@
     <string name="done">انجام شد.</string>
     <string name="in_name">لطفا ابتدا اسمت رو بهم بگو.</string>
     <string name="not_done">لازم هست به اینترنت وصل بشی. فقط همین یه دفعه و دیگه لازم نیست!</string>
-    <string name="send_ok">پیامت ارسال شد. میتونی بخش کامنت ها اونو ببینی :)</string>
+    <string name="send_ok">سپاس از ثبت نظرت. نظر شما بعد از تایید منتشر خواهد شد.</string>
     <string name="error_name">نام کوتاه هست.</string>
     <string name="error_comment">توضیحات بیشتری بنویس.</string>
     <string name="ac_city">اسم شهرت رو وارد کن تا تو بخش کامنتها ثبت بشه.</string>
     <string name="city_guide">اسم شهرت...</string>
     <string name="of">از</string>
     <string name="todo">TODO</string>
-    <string name="num_com">تعداد نظرات:</string>
+    <string name="num_com">تعداد نظرات ارسال شده:</string>
     <string name="ac_info_admin">پیام رایکا:‌</string>
     <string name="rat1">امتیاز</string>
     <string name="add_album">در حال افزون آهنگ به لیست این خواننده هستیم.</string>

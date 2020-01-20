@@ -2,6 +2,7 @@ package com.ryca.lyric.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,7 @@ public class CommentsFragment extends Fragment implements CommentAdapter.Comment
                 try {
                     DatumComment results = response.body();
                     if (results != null) {
+                        Log.e(">> Comment-Size: ", results.getData().size() + " ");
                         mAdapter.addAll(results.getData());
                     } else loading = false;
                 } catch (Exception ignored) {

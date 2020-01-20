@@ -3,9 +3,11 @@ package com.ryca.lyric.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,54 +83,60 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String city = prefs.getString("email", null);
 
-        if (contact.getCity() != null) {
-            holder.name.setText(contact.getName()
-                    + " " + context.getString(R.string.of)
-                    + " " + contact.getCity());
-        } else
-            holder.name.setText(contact.getName());
-        holder.rate.setText(String.valueOf(contact.getRate()));
-        if (contact.getRate()<3)
-            holder.rate.setBackgroundResource(R.drawable.rb_rate_0);
-        else if (contact.getRate()>4)
-            holder.rate.setBackgroundResource(R.drawable.rb_rate_2);
-        else
-            holder.rate.setBackgroundResource(R.drawable.rb_rate_1);
-        holder.comment.setText(contact.getComment());
+        if (contact != null) {
+            holder.rl_comment.setVisibility(View.VISIBLE);
+            if (contact.getCity() != null) {
+                holder.name.setText(contact.getName()
+                        + " " + context.getString(R.string.of)
+                        + " " + contact.getCity());
+            } else
+                holder.name.setText(contact.getName());
+            holder.rate.setText(String.valueOf(contact.getRate()));
+            if (contact.getRate() < 3)
+                holder.rate.setBackgroundResource(R.drawable.rb_rate_0);
+            else if (contact.getRate() > 4)
+                holder.rate.setBackgroundResource(R.drawable.rb_rate_2);
+            else
+                holder.rate.setBackgroundResource(R.drawable.rb_rate_1);
+            holder.comment.setText(contact.getComment());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        long timeStamp = 0;
-        try {
-            timeStamp = sdf.parse( contact.getCreatedAt()).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            long timeStamp = 0;
+            try {
+                timeStamp = sdf.parse(contact.getCreatedAt()).getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String time = currentDateFormat.format(timeStamp);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date2 = null;
+            try {
+                date2 = df.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            df.setTimeZone(TimeZone.getDefault());
+            String mDate = df.format(date2);
+
+            String[] date = mDate.split(" ")[0].split("-");
+            DateConverter dateConverter = new DateConverter();
+            JalaliDate jalaliDate = dateConverter.gregorianToJalali
+                    (Integer.parseInt(date[0])
+                            , Integer.parseInt(date[1])
+                            , Integer.parseInt(date[2]));
+
+            holder.date.setText(jalaliDate.format
+                    (new JalaliDateFormatter("yyyy- M dd",
+                            JalaliDateFormatter.FORMAT_IN_PERSIAN)) + " " +
+                    mDate.split(" ")[1]);
+        } else {
+            Log.e(">> IS_ACCEPT: ", "Contact is null!");
         }
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String time =currentDateFormat.format(timeStamp);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        df.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date date2 = null;
-        try {
-            date2 = df.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        df.setTimeZone(TimeZone.getDefault());
-        String mDate = df.format(date2);
-
-        String[] date = mDate.split(" ")[0].split("-");
-        DateConverter dateConverter = new DateConverter();
-        JalaliDate jalaliDate = dateConverter.gregorianToJalali
-                (Integer.parseInt(date[0])
-                        , Integer.parseInt(date[1])
-                        , Integer.parseInt(date[2]));
-
-        holder.date.setText(jalaliDate.format
-                (new JalaliDateFormatter("yyyy- M dd",
-                        JalaliDateFormatter.FORMAT_IN_PERSIAN)) + " " +
-                mDate.split(" ")[1]);
     }
 
     public interface CommentAdapterListener {
@@ -137,6 +145,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, date, comment, rate;
+        RelativeLayout rl_comment;
 
         MyViewHolder(View view) {
             super(view);
@@ -144,6 +153,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             date = view.findViewById(R.id.date);
             comment = view.findViewById(R.id.comment);
             rate = view.findViewById(R.id.rate);
+            rl_comment = view.findViewById(R.id.rl_comment);
 
             view.setOnClickListener(view1 -> {
                 listener.onContactSelected(contactListFiltered.get(getAdapterPosition()));
