@@ -6,9 +6,11 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.crashlytics.android.Crashlytics;
 import com.danikula.videocache.HttpProxyCacheServer;
 
 import es.dmoral.toasty.Toasty;
+import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -27,7 +29,13 @@ public class AppController extends Application {
     public static boolean hasNetwork() {
         return instance.isNetworkConnected();
     }
-
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
     public static HttpProxyCacheServer getProxy(Context context) {
         AppController app = (AppController) context.getApplicationContext();
         return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
@@ -40,6 +48,7 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         if (instance == null) {
             instance = this;
         }
@@ -49,13 +58,5 @@ public class AppController extends Application {
                 .setDefaultFontPath("fonts/by.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
     }
 }

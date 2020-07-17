@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.eloyzone.jalalicalendar.DateConverter;
-import com.github.eloyzone.jalalicalendar.JalaliDate;
-import com.github.eloyzone.jalalicalendar.JalaliDateFormatter;
 import com.ryca.lyric.R;
 import com.ryca.lyric.model.Comment;
 
@@ -23,7 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
+
+import saman.zamani.persiandate.PersianDate;
+import saman.zamani.persiandate.PersianDateFormat;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -100,39 +99,67 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
                 holder.rate.setBackgroundResource(R.drawable.rb_rate_1);
             holder.comment.setText(contact.getComment());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-            long timeStamp = 0;
-            try {
-                timeStamp = sdf.parse(contact.getCreatedAt()).getTime();
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+            Log.e(">> TIME: ", contact.getCreatedAt());
+
+            Date localTime = null;
+            if (contact.getCreatedAt() != null) {
+                try {
+                    localTime = new SimpleDateFormat(
+                            "yyyy-MM-dd'T'HH:mm:ss",
+                            Locale.getDefault()).parse(contact.getCreatedAt());
+                } catch (java.text.ParseException e) {
+                    try {
+                        localTime = new SimpleDateFormat(
+                                "yyyy-MM-dd",
+                                Locale.getDefault()).parse(contact.getCreatedAt());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                try {
+                    PersianDate pdate = new PersianDate(localTime.getTime());
+                    PersianDateFormat pdformater2 = new PersianDateFormat("l - j F Y");
+                    holder.date.setText(pdformater2.format(pdate));
+                } catch (Exception ignored) {
+
+                }
             }
-            SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            String time = currentDateFormat.format(timeStamp);
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-            df.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date date2 = null;
-            try {
-                date2 = df.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
-            df.setTimeZone(TimeZone.getDefault());
-            String mDate = df.format(date2);
-
-            String[] date = mDate.split(" ")[0].split("-");
-            DateConverter dateConverter = new DateConverter();
-            JalaliDate jalaliDate = dateConverter.gregorianToJalali
-                    (Integer.parseInt(date[0])
-                            , Integer.parseInt(date[1])
-                            , Integer.parseInt(date[2]));
-
-            holder.date.setText(jalaliDate.format
-                    (new JalaliDateFormatter("yyyy- M dd",
-                            JalaliDateFormatter.FORMAT_IN_PERSIAN)) + " " +
-                    mDate.split(" ")[1]);
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+//            long timeStamp = 0;
+//            try {
+//                timeStamp = sdf.parse(contact.getCreatedAt()).getTime();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//            String time = currentDateFormat.format(timeStamp);
+//
+//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+//            Date date2 = null;
+//            try {
+//                date2 = df.parse(time);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//            df.setTimeZone(TimeZone.getDefault());
+//            String mDate = df.format(date2);
+//
+//            String[] date = mDate.split(" ")[0].split("-");
+//            DateConverter dateConverter = new DateConverter();
+//            JalaliDate jalaliDate = dateConverter.gregorianToJalali
+//                    (Integer.parseInt(date[0])
+//                            , Integer.parseInt(date[1])
+//                            , Integer.parseInt(date[2]));
+//
+//            holder.date.setText(jalaliDate.format
+//                    (new JalaliDateFormatter("yyyy- M dd",
+//                            JalaliDateFormatter.FORMAT_IN_PERSIAN)) + " " +
+//                    mDate.split(" ")[1]);
         } else {
             Log.e(">> IS_ACCEPT: ", "Contact is null!");
         }

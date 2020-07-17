@@ -52,7 +52,6 @@ public class LrcHelper {
             long lrcTime = 0;
             try {
                 while ((line = br.readLine()) != null) {
-                    Log.e(">> LRC: ", line);
                     List<Lrc> lrcList = parseLrc(line, lrcTime);
                     if (lrcList != null && lrcList.size() != 0) {
                         lrcTime = lrcList.get(0).getTime();
