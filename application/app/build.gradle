@@ -61,7 +61,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     // okhttp
-    def okHttpVersion = "3.11.0"
+    def okHttpVersion = "3.14.9"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
