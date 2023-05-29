@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.hedgehog.ratingbar:app:1.1.2'
     implementation 'commons-io:commons-io:2.12.0'
     // Retrofit
-    def retrofitVersion = "2.5.0"
+    def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
